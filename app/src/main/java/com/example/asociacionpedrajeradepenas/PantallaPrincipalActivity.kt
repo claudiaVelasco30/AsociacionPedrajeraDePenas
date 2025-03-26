@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.enableEdgeToEdge
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -17,9 +18,11 @@ import com.google.firebase.auth.FirebaseAuth
 class PantallaPrincipalActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPantallaPrincipalBinding
+    private var userRole: String = "usuario"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //enableEdgeToEdge()
 
         binding = ActivityPantallaPrincipalBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -52,8 +55,15 @@ class PantallaPrincipalActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_toolbar, menu)
+
+        // Esconder opciones según el rol obtenido
+        val isAdminOrRep = userRole == "administrador" || userRole == "representante"
+        menu?.findItem(R.id.action_opciones)?.isVisible = isAdminOrRep
+
         return true
     }
+
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

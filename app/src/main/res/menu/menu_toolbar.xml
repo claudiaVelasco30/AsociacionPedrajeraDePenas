@@ -7,6 +7,11 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_opciones"
+        android:title="Opciones"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_logout"
         android:title="Cerrar sesión"
         app:showAsAction="never" />
