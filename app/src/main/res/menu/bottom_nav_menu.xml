@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_eventos"
+        android:icon="@drawable/baseline_today_24"
+        android:title="Eventos" />
+
+    <item
+        android:id="@+id/navigation_penas"
+        android:icon="@drawable/outline_groups_24"
+        android:title="Peñas" />
+
+    <item
+        android:id="@+id/navigation_crear"
+        android:icon="@drawable/baseline_add_24"
+        android:title="Crear peña" />
+
+</menu>

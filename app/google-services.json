@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "754809299947",
+    "project_id": "asocpedrajas-ca1b1",
+    "storage_bucket": "asocpedrajas-ca1b1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:754809299947:android:5349a42adcc9be318eafae",
+        "android_client_info": {
+          "package_name": "com.example.asociacionpedrajeradepenas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "754809299947-srgu9at8cdtnqoqv42gb75n8plfesjcl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.asociacionpedrajeradepenas",
+            "certificate_hash": "1fd30480018d1af16a9db946322d6aa64c0f8a1d"
+          }
+        },
+        {
+          "client_id": "754809299947-rvodupad8g6rdscld1asehrfuqj5htgl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKNzRNaELIHpNDzEWybEH9TxN-TIHsJbE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "754809299947-rvodupad8g6rdscld1asehrfuqj5htgl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

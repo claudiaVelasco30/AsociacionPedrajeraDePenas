@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/navigation_eventos">
+
+    <fragment
+        android:id="@+id/navigation_eventos"
+        android:name="com.example.asociacionpedrajeradepenas.ui.eventos.EventosFragment"
+        tools:layout="@layout/fragment_eventos" />
+
+    <fragment
+        android:id="@+id/navigation_penas"
+        android:name="com.example.asociacionpedrajeradepenas.ui.penas.PenasFragment"
+        tools:layout="@layout/fragment_penas" />
+
+    <fragment
+        android:id="@+id/navigation_crear"
+        android:name="com.example.asociacionpedrajeradepenas.ui.crear.CrearFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_crear" />
+</navigation>
