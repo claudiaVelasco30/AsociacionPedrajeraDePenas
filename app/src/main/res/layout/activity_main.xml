@@ -42,7 +42,7 @@
             android:background="@color/white"
             android:backgroundTint="@color/white"
             android:ems="10"
-            android:inputType="text"
+            android:inputType="textEmailAddress"
             android:paddingStart="15dp"
             android:textColor="@color/black" />
 

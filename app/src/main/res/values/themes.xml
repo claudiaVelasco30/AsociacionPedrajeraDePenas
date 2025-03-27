@@ -6,4 +6,13 @@
     </style>
 
     <style name="Theme.AsociaciónPedrajeraDePeñas" parent="Base.Theme.AsociaciónPedrajeraDePeñas" />
+
+    <style name="Theme.AsociaciónPedrajeraDePeñas.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.AsociaciónPedrajeraDePeñas.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.AsociaciónPedrajeraDePeñas.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
