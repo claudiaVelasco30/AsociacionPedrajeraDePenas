@@ -14,12 +14,14 @@ import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var oneTapClient: SignInClient
     private lateinit var signInRequest: BeginSignInRequest
+    private lateinit var database: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         auth = FirebaseAuth.getInstance()
+        database = FirebaseFirestore.getInstance()
         oneTapClient = Identity.getSignInClient(this)
 
         // Configurar el cuadro de diálogo para elegir cuenta
@@ -65,7 +68,6 @@ class MainActivity : AppCompatActivity() {
         btnGoogle.setOnClickListener {
             signInWithGoogle()
         }
-
     }
 
     private fun loginUser(email: String, password: String) {
@@ -80,22 +82,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun signInWithGoogle() {
-        oneTapClient.beginSignIn(
-            BeginSignInRequest.builder()
-                .setGoogleIdTokenRequestOptions(
-                    BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                        .setSupported(true)
-                        .setServerClientId(getString(R.string.default_web_client_id))
-                        .setFilterByAuthorizedAccounts(false) // Permite elegir cualquier cuenta o agregar una nueva
-                        .build()
-                )
-                .setAutoSelectEnabled(true) // Permite agregar una cuenta si no hay ninguna vinculada
-                .build()
-        ).addOnSuccessListener { result ->
-            googleSignInLauncher.launch(IntentSenderRequest.Builder(result.pendingIntent.intentSender).build())
-        }.addOnFailureListener {
-            Toast.makeText(this, "Error con Google: ${it.message}", Toast.LENGTH_SHORT).show()
-        }
+        oneTapClient.beginSignIn(signInRequest)
+            .addOnSuccessListener { result ->
+                googleSignInLauncher.launch(IntentSenderRequest.Builder(result.pendingIntent.intentSender).build())
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Error con Google: ${it.message}", Toast.LENGTH_SHORT).show()
+            }
     }
 
     private val googleSignInLauncher = registerForActivityResult(
@@ -110,6 +103,10 @@ class MainActivity : AppCompatActivity() {
                     auth.signInWithCredential(firebaseCredential)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
+                                val user = auth.currentUser
+                                user?.let {
+                                    guardarUsuarioEnFirestore(it.uid, it.displayName ?: "Usuario", it.email ?: "")
+                                }
                                 Toast.makeText(this, "Inicio de sesión con Google exitoso", Toast.LENGTH_SHORT).show()
                                 startActivity(Intent(this, PantallaPrincipalActivity::class.java))
                                 finish()
@@ -120,6 +117,24 @@ class MainActivity : AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 Toast.makeText(this, "Error al obtener credenciales", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+
+    private fun guardarUsuarioEnFirestore(uid: String, nombre: String, email: String) {
+        val userRef = database.collection("Usuarios").document(uid)
+        userRef.get().addOnSuccessListener { document ->
+            if (!document.exists()) {
+                val user = hashMapOf(
+                    "idUsuario" to uid,
+                    "nombre" to nombre,
+                    //"apellidos" to apellidos,
+                    "email" to email,
+                    "rol" to "usuario",
+                    "idPeña" to null
+                )
+                userRef.set(user)
             }
         }
     }
