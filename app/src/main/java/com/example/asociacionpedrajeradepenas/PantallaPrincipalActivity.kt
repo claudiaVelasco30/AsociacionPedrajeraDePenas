@@ -13,11 +13,14 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.asociacionpedrajeradepenas.databinding.ActivityPantallaPrincipalBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class PantallaPrincipalActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPantallaPrincipalBinding
-    private var userRole: String = "usuario"
+    private var userRole: String = ""
+    private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +31,8 @@ class PantallaPrincipalActivity : AppCompatActivity() {
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+        val nombreToolbar = binding.nombreToolbar
 
         // Eliminar título de la Toolbar
         supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -50,6 +55,40 @@ class PantallaPrincipalActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+        nombreToolbar.setText(obtenerNombreUsuario())
+        obtenerRolUsuario()
+    }
+
+    private fun obtenerRolUsuario() {
+        val user = auth.currentUser
+        if (user != null) {
+            db.collection("Usuarios").document(user.uid) // Asegúrate de que "Usuarios" coincide con Firestore
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        userRole = document.getString("rol") ?: "usuario" // Verifica que el campo "rol" está en Firestore
+                        invalidateOptionsMenu() // Refrescar el menú después de obtener el rol
+                    }
+                }
+        }
+    }
+
+    private fun obtenerNombreUsuario(): String {
+        val user = auth.currentUser
+        var nombreUsuario = "Nombre"
+        if (user != null) {
+            db.collection("Usuarios").document(user.uid) // Asegúrate de que "Usuarios" coincide con Firestore
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        nombreUsuario =  document.getString("nombre") ?: "Nombre" // Verifica que el campo "nombre" está en Firestore
+                    }
+                }
+        }
+        return nombreUsuario
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -76,6 +115,14 @@ class PantallaPrincipalActivity : AppCompatActivity() {
                 FirebaseAuth.getInstance().signOut()
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
+                true
+            }
+            R.id.action_opciones -> {
+                if (userRole == "administrador"){
+                    startActivity(Intent(this, PantallaAdministradorActivity::class.java))
+                } else if (userRole == "representante"){
+
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)

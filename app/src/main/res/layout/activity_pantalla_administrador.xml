@@ -4,33 +4,62 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/fondo1"
     tools:context=".PantallaAdministradorActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/Theme.AsociaciónPedrajeraDePeñas.AppBarOverlay">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <!-- Toolbar personalizada -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/verdePrincipal"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:titleTextColor="@android:color/white"
+        app:layout_scrollFlags="scroll|enterAlways"
+        tools:ignore="MissingConstraints">
+
+        <ImageView
+            android:id="@+id/iconoUsuario"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:src="@drawable/outline_supervised_user_circle_24"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"/>
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/nombreToolbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:minHeight="?actionBarSize"
-            android:padding="@dimen/appbar_padding"
-            android:text="@string/app_name"
-            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
+            android:text="Nombre y apellidos"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentTop="true"/>
+    </androidx.appcompat.widget.Toolbar>
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </com.google.android.material.appbar.AppBarLayout>
+    <!-- TabLayout para las pestañas -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/fondo2"
+        app:tabIndicatorColor="@color/verdePrincipal" />
 
+    <!-- ViewPager para el contenido de las pestañas -->
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_below="@id/tabs" />
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

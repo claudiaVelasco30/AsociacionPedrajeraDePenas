@@ -6,6 +6,7 @@ import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,6 +46,10 @@ class CrearFragment : Fragment() {
             val nombre = binding.editTextNombrePena.text.toString().trim()
             val ubicacion = binding.editTextUbicacion.text.toString().trim()
 
+            binding.editTextNombrePena.setText("")
+            binding.editTextUbicacion.setText("")
+            binding.editTextFoto.setText("")
+
             if (nombre.isNotEmpty() && imageUri != null) {
                 if (ubicacion.isNotEmpty()) {
                     obtenerCoordenadasYSubirPena(nombre, ubicacion)
@@ -61,14 +66,31 @@ class CrearFragment : Fragment() {
 
     private fun seleccionarImagen() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(intent, PICK_IMAGE_REQUEST)
+        startActivityForResult(intent, REQUEST_CODE_IMAGE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK) {
-            imageUri = data?.data
+        if (requestCode == REQUEST_CODE_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
+            imageUri = data.data
+            if (imageUri != null) {
+                // Obtener el nombre del archivo desde la URI y mostrarlo en el EditText
+                val nombreArchivo = obtenerNombreArchivo(imageUri!!)
+                binding.editTextFoto.setText(nombreArchivo) // Asigna el nombre al EditText
+            }
         }
+    }
+
+    private fun obtenerNombreArchivo(uri: Uri): String {
+        var nombre = "desconocido.jpg"
+        val cursor = requireContext().contentResolver.query(uri, null, null, null, null)
+        cursor?.use {
+            if (it.moveToFirst()) {
+                val index = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                if (index != -1) nombre = it.getString(index)
+            }
+        }
+        return nombre
     }
 
     private fun obtenerCoordenadasYSubirPena(nombre: String, ubicacion: String) {
@@ -101,7 +123,7 @@ class CrearFragment : Fragment() {
     }
 
     private fun guardarPenaEnFirestore(nombre: String, ubicacion: String, lat: Double?, lon: Double?, imageUrl: String) {
-        val idPena = database.collection("penas").document().id
+        val idPena = database.collection("Penas").document().id
         val idRepresentante = auth.currentUser?.uid ?: return
 
         val pena = hashMapOf(
@@ -117,25 +139,21 @@ class CrearFragment : Fragment() {
             pena["lon"] = lon.toString()
         }
 
-        database.collection("penas").document(idPena).set(pena).addOnSuccessListener {
+        database.collection("Penas").document(idPena).set(pena).addOnSuccessListener {
             actualizarRolUsuario(idRepresentante)
             crearSolicitud(idPena, idRepresentante)
-        }.addOnFailureListener {
-            Toast.makeText(requireContext(), "Error al guardar la peña", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun actualizarRolUsuario(userId: String) {
-        val userRef = database.collection("usuarios").document(userId)
+        val userRef = database.collection("Usuarios").document(userId)
         userRef.update("rol", "representante").addOnSuccessListener {
             Toast.makeText(requireContext(), "Peña creada con éxito", Toast.LENGTH_SHORT).show()
-        }.addOnFailureListener {
-            Toast.makeText(requireContext(), "Error al actualizar el rol del usuario", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun crearSolicitud(idPena: String, idUsuario: String) {
-        val idSolicitud = database.collection("solicitudes").document().id
+        val idSolicitud = database.collection("Solicitudes").document().id
         val solicitud = hashMapOf(
             "idSolicitud" to idSolicitud,
             "estado" to "pendiente",
@@ -143,9 +161,7 @@ class CrearFragment : Fragment() {
             "idUsuario" to idUsuario
         )
 
-        database.collection("solicitudes").document(idSolicitud).set(solicitud).addOnFailureListener {
-            Toast.makeText(requireContext(), "Error al crear la solicitud", Toast.LENGTH_SHORT).show()
-        }
+        database.collection("solicitudes").document(idSolicitud).set(solicitud)
     }
 
     override fun onDestroyView() {
@@ -154,6 +170,6 @@ class CrearFragment : Fragment() {
     }
 
     companion object {
-        private const val PICK_IMAGE_REQUEST = 1
+        private const val REQUEST_CODE_IMAGE = 1
     }
 }

@@ -19,7 +19,7 @@
         tools:ignore="MissingConstraints">
 
         <ImageView
-            android:id="@+id/icono_usuario"
+            android:id="@+id/iconoUsuario"
             android:layout_width="46dp"
             android:layout_height="46dp"
             android:src="@drawable/outline_supervised_user_circle_24"
@@ -28,9 +28,10 @@
             tools:layout_editor_absoluteY="9dp" />
 
         <TextView
+            android:id="@+id/nombreToolbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nombre y apellido"
+            android:text="Nombre y apellidos"
             android:textColor="@color/white"
             android:textSize="24sp"
             tools:layout_editor_absoluteX="198dp"

@@ -127,7 +127,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:backgroundTint="@color/grisOscuro"
-                android:text="Entra o regístrate con Google"
+                android:text="Continúa con Google"
                 android:textColor="@color/black"
                 android:paddingStart="44dp"
                 android:textSize="16sp" />
@@ -135,7 +135,7 @@
             <ImageView
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="45dp"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/logo_google" />
         </FrameLayout>
