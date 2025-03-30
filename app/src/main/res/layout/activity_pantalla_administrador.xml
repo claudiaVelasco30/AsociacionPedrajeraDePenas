@@ -16,7 +16,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="wrap_content"
         android:background="@color/verdePrincipal"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
@@ -47,12 +47,14 @@
     </androidx.appcompat.widget.Toolbar>
 
     <!-- TabLayout para las pestañas -->
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/fondo2"
-        app:tabIndicatorColor="@color/verdePrincipal" />
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/fondo2"
+            app:tabIndicatorColor="@color/verdePrincipal"
+            app:tabSelectedTextColor="@color/verdePrincipal"
+            app:tabTextColor="#49454F" />
 
     <!-- ViewPager para el contenido de las pestañas -->
     <androidx.viewpager.widget.ViewPager

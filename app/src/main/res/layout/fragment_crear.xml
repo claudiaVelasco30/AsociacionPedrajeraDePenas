@@ -35,6 +35,7 @@
             android:ems="10"
             android:inputType="text"
             android:paddingStart="15dp"
+            android:paddingEnd="15dp"
             android:textColor="@color/black" />
 
         <TextView
@@ -64,6 +65,7 @@
                 android:textSize="16sp"
                 android:inputType="text"
                 android:paddingStart="15dp"
+                android:paddingEnd="15dp"
                 android:textColor="@color/black"/>
 
             <ImageButton
@@ -74,17 +76,6 @@
                 android:contentDescription="Subir foto"
                 android:src="@drawable/outline_drive_folder_upload_24" />
         </LinearLayout>
-
-<!--        <EditText-->
-<!--            android:id="@+id/editTextFoto"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="40dp"-->
-<!--            android:background="@color/white"-->
-<!--            android:backgroundTint="@color/white"-->
-<!--            android:ems="10"-->
-<!--            android:inputType="text"-->
-<!--            android:paddingStart="15dp"-->
-<!--            android:textColor="@color/black" />-->
 
         <TextView
             android:layout_width="wrap_content"
@@ -105,6 +96,7 @@
             android:ems="10"
             android:inputType="textPostalAddress"
             android:paddingStart="15dp"
+            android:paddingEnd="15dp"
             android:textColor="@color/black" />
 
         <Button

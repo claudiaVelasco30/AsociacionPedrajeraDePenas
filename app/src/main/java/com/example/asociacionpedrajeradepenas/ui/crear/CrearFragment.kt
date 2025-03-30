@@ -96,7 +96,8 @@ class CrearFragment : Fragment() {
     private fun obtenerCoordenadasYSubirPena(nombre: String, ubicacion: String) {
         val geocoder = Geocoder(requireContext(), Locale.getDefault())
         try {
-            val addresses = geocoder.getFromLocationName(ubicacion, 1)
+            val direccionCompleta = "$ubicacion, Pedrajas de San Esteban, España"
+            val addresses = geocoder.getFromLocationName(direccionCompleta, 1)
             if (addresses != null && addresses.isNotEmpty()) {
                 val lat = addresses[0].latitude
                 val lon = addresses[0].longitude

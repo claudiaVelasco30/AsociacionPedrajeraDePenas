@@ -5,8 +5,11 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -24,7 +27,8 @@ class PantallaPrincipalActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //enableEdgeToEdge()
+        enableEdgeToEdge()
+
 
         binding = ActivityPantallaPrincipalBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -107,7 +111,7 @@ class PantallaPrincipalActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_mapa -> {
                 // Abrir actividad de Mapa
-                startActivity(Intent(this, PantallaAdministradorActivity::class.java))
+                startActivity(Intent(this, PantallaMapaActivity::class.java))
                 true
             }
             R.id.action_logout -> {
