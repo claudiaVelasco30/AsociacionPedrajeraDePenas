@@ -1,6 +1,7 @@
 package com.example.asociacionpedrajeradepenas
 
 import android.os.Bundle
+import android.view.Menu
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,13 @@ class PantallaMapaActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
+        // Margen dinámico
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.toolbar)) { view, insets ->
+            val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+            view.setPadding(0, statusBarHeight - 8 , 0, 8)
+            WindowInsetsCompat.CONSUMED
+        }
+
         val nombreToolbar = findViewById<TextView>(R.id.nombreToolbar)
 
         // Eliminar título de la Toolbar
@@ -25,5 +33,10 @@ class PantallaMapaActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.contenedorMapa, MapaFragment())
             .commit()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_toolbar, menu)
+        return true
     }
 }

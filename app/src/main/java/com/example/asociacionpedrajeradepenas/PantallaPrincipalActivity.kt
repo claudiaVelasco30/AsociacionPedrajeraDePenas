@@ -27,14 +27,18 @@ class PantallaPrincipalActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-
 
         binding = ActivityPantallaPrincipalBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+        // Margen dinámico
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.toolbar)) { view, insets ->
+            val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+            view.setPadding(0, statusBarHeight - 8 , 0, 8)
+            WindowInsetsCompat.CONSUMED
+        }
 
         val nombreToolbar = binding.nombreToolbar
 
@@ -62,7 +66,7 @@ class PantallaPrincipalActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
-        nombreToolbar.setText(obtenerNombreUsuario())
+        obtenerNombreUsuario()
         obtenerRolUsuario()
     }
 
@@ -80,19 +84,18 @@ class PantallaPrincipalActivity : AppCompatActivity() {
         }
     }
 
-    private fun obtenerNombreUsuario(): String {
+    private fun obtenerNombreUsuario() {
         val user = auth.currentUser
-        var nombreUsuario = "Nombre"
         if (user != null) {
-            db.collection("Usuarios").document(user.uid) // Asegúrate de que "Usuarios" coincide con Firestore
+            db.collection("Usuarios").document(user.uid)
                 .get()
                 .addOnSuccessListener { document ->
                     if (document.exists()) {
-                        nombreUsuario =  document.getString("nombre") ?: "Nombre" // Verifica que el campo "nombre" está en Firestore
+                        val nombreUsuario = document.getString("nombre") ?: "Nombre"
+                        binding.nombreToolbar.text = nombreUsuario // Actualizar la UI aquí
                     }
                 }
         }
-        return nombreUsuario
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -104,8 +107,6 @@ class PantallaPrincipalActivity : AppCompatActivity() {
 
         return true
     }
-
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
