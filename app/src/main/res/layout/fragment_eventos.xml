@@ -8,7 +8,7 @@
     tools:context=".ui.eventos.EventosFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerEventos"
+        android:id="@+id/rvEventos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical" />

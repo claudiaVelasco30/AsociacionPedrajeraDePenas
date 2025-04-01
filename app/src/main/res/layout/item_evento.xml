@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="40dp"
+    android:layout_margin="50dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp">
 
@@ -11,38 +11,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:paddingBottom="8dp">
 
         <ImageView
             android:id="@+id/imgEvento"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:scaleType="centerCrop"
-            android:src="" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/outline_image_24" />
 
         <TextView
-            android:id="@+id/txtTitulo"
+            android:id="@+id/tvTitulo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Título del evento"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             android:textSize="18sp"
             android:textStyle="bold"
             android:paddingTop="8dp" />
 
         <TextView
-            android:id="@+id/txtFechaHora"
+            android:id="@+id/tvFechaHora"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Fecha y hora"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             android:textSize="14sp"
             android:textColor="@android:color/darker_gray" />
 
         <TextView
-            android:id="@+id/txtDescripcion"
+            android:id="@+id/tvDescripcion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Descripción del evento"
             android:textSize="14sp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             android:maxLines="2"
             android:ellipsize="end"
             android:paddingBottom="8dp" />
