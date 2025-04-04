@@ -92,14 +92,16 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="20dp"
+            android:weightSum="1">
 
             <View
                 android:id="@+id/divider1"
-                android:layout_width="138dp"
+                android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
+                android:layout_weight="0.45"
                 android:background="#8F8F94" />
 
             <TextView
@@ -108,13 +110,15 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:text="o"
+                android:gravity="center"
                 android:textColor="@color/black" />
             <View
                 android:id="@+id/divider2"
-                android:layout_width="138dp"
+                android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
+                android:layout_weight="0.45"
                 android:background="#8F8F94" />
 
         </LinearLayout>

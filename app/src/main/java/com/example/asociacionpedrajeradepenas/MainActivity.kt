@@ -6,12 +6,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.IntentSenderRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
@@ -82,45 +83,42 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun signInWithGoogle() {
-        oneTapClient.beginSignIn(signInRequest)
-            .addOnSuccessListener { result ->
-                googleSignInLauncher.launch(IntentSenderRequest.Builder(result.pendingIntent.intentSender).build())
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "Error con Google: ${it.message}", Toast.LENGTH_SHORT).show()
-            }
+        val googleConf = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        val googleClient = GoogleSignIn.getClient(this, googleConf)
+        startActivityForResult(googleClient.signInIntent, 100)
+        googleClient.signOut()
     }
 
-    private val googleSignInLauncher = registerForActivityResult(
-        ActivityResultContracts.StartIntentSenderForResult()
-    ) { result ->
-        if (result.resultCode == RESULT_OK) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 100) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
-                val credential = oneTapClient.getSignInCredentialFromIntent(result.data)
-                val googleIdToken = credential.googleIdToken
-                if (googleIdToken != null) {
-                    val firebaseCredential = GoogleAuthProvider.getCredential(googleIdToken, null)
-                    auth.signInWithCredential(firebaseCredential)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                val user = auth.currentUser
-                                user?.let {
-                                    guardarUsuarioEnFirestore(it.uid, it.displayName ?: "Usuario", it.email ?: "")
-                                }
-                                Toast.makeText(this, "Inicio de sesión con Google exitoso", Toast.LENGTH_SHORT).show()
-                                startActivity(Intent(this, PantallaPrincipalActivity::class.java))
-                                finish()
-                            } else {
-                                Toast.makeText(this, "Error: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                val account = task.getResult(ApiException::class.java)
+                if (account != null) {
+                    val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+                    auth.signInWithCredential(credential).addOnCompleteListener { result ->
+                        if (result.isSuccessful) {
+                            val user = auth.currentUser
+                            user?.let {
+                                guardarUsuarioEnFirestore(it.uid, it.displayName ?: "Usuario", it.email ?: "")
                             }
+                            Toast.makeText(this, "Inicio de sesión con Google exitoso", Toast.LENGTH_SHORT).show()
+                            startActivity(Intent(this, PantallaPrincipalActivity::class.java))
+                            finish()
+                        } else {
+                            Toast.makeText(this, "Error: ${result.exception?.message}", Toast.LENGTH_SHORT).show()
                         }
+                    }
                 }
-            } catch (e: Exception) {
-                Toast.makeText(this, "Error al obtener credenciales", Toast.LENGTH_SHORT).show()
+            } catch (e: ApiException) {
+                Toast.makeText(this, "Error al iniciar sesión con Google", Toast.LENGTH_SHORT).show()
             }
         }
     }
-
 
     private fun guardarUsuarioEnFirestore(uid: String, nombre: String, email: String) {
         val userRef = database.collection("Usuarios").document(uid)
@@ -129,7 +127,6 @@ class MainActivity : AppCompatActivity() {
                 val user = hashMapOf(
                     "idUsuario" to uid,
                     "nombre" to nombre,
-                    //"apellidos" to apellidos,
                     "email" to email,
                     "rol" to "usuario",
                     "idPeña" to null

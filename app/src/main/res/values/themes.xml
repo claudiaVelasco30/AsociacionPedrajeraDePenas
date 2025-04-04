@@ -15,4 +15,17 @@
     <style name="Theme.AsociaciónPedrajeraDePeñas.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.AsociaciónPedrajeraDePeñas.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="CustomAlertDialog" parent="Theme.Material3.Light.Dialog.Alert">
+        <item name="android:background">@color/grisOscuro</item>
+        <item name="android:windowMinWidthMajor">80%</item>
+        <item name="android:windowMinWidthMinor">80%</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/DialogButton</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/DialogButton</item>
+    </style>
+
+    <style name="DialogButton">
+        <item name="android:textColor">@color/verdePrincipal</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

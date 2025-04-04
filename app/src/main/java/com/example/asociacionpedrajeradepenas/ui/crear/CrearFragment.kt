@@ -27,6 +27,8 @@ class CrearFragment : Fragment() {
     private lateinit var storage: FirebaseStorage
     private lateinit var database: FirebaseFirestore
     private var imageUri: Uri? = null
+    private lateinit var userRole: String
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -141,13 +143,14 @@ class CrearFragment : Fragment() {
         }
 
         database.collection("Penas").document(idPena).set(pena).addOnSuccessListener {
-            actualizarRolUsuario(idRepresentante)
+            actualizarRolUsuario(idRepresentante, idPena)
             crearSolicitud(idPena, idRepresentante)
         }
     }
 
-    private fun actualizarRolUsuario(userId: String) {
+    private fun actualizarRolUsuario(userId: String, idPena: String) {
         val userRef = database.collection("Usuarios").document(userId)
+        userRef.update("idPeña", idPena)
         userRef.update("rol", "representante").addOnSuccessListener {
             Toast.makeText(requireContext(), "Peña creada con éxito", Toast.LENGTH_SHORT).show()
         }

@@ -8,9 +8,20 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
-class EventoAdapter(private val eventos: List<Map<String, Any>>) : RecyclerView.Adapter<EventoAdapter.EventoViewHolder>() {
+class EventoAdapter(eventos: List<Map<String, Any>>) :
+    RecyclerView.Adapter<EventoAdapter.EventoViewHolder>() {
+
+    private val eventosOrdenados = eventos.sortedByDescending { evento ->
+        val fecha = evento["fecha_hora"]
+        when (fecha) {
+            is com.google.firebase.Timestamp -> fecha.toDate().time // Convertir Timestamp a milisegundos
+            is Date -> fecha.time
+            else -> Long.MIN_VALUE // Si no hay fecha, ponerlo al final
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventoViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_evento, parent, false)
@@ -18,23 +29,25 @@ class EventoAdapter(private val eventos: List<Map<String, Any>>) : RecyclerView.
     }
 
     override fun onBindViewHolder(holder: EventoViewHolder, position: Int) {
-        val evento = eventos[position]
+        val evento = eventosOrdenados[position]
         holder.bind(evento)
     }
 
-    override fun getItemCount(): Int = eventos.size
+    override fun getItemCount(): Int = eventosOrdenados.size
 
     class EventoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val titulo: TextView = itemView.findViewById(R.id.tvTitulo)
         private val descripcion: TextView = itemView.findViewById(R.id.tvDescripcion)
         private val fechaHora: TextView = itemView.findViewById(R.id.tvFechaHora)
         private val imagen: ImageView = itemView.findViewById(R.id.imgEvento)
+        private val ubicacion: TextView = itemView.findViewById(R.id.tvUbicacion)
 
         fun bind(evento: Map<String, Any>) {
-            titulo.text = evento["nombre"] as? String ?: "Evento sin título"
+            titulo.text = evento["nombre"] as? String ?: "Evento sin nombre"
             descripcion.text = evento["descripcion"] as? String ?: "Sin descripción"
+            ubicacion.text = evento["ubicacion"] as? String ?: "Ubicación no disponible"
 
-            val fechaOriginal = evento["fecha_hora"] as? String ?: ""
+            val fechaOriginal = evento["fecha_hora"]
             fechaHora.text = formatearFecha(fechaOriginal)
 
             val imagenUrl = evento["imagenUrl"] as? String
@@ -43,14 +56,21 @@ class EventoAdapter(private val eventos: List<Map<String, Any>>) : RecyclerView.
             }
         }
 
-        private fun formatearFecha(fechaOriginal: String): String {
+        private fun formatearFecha(fechaOriginal: Any?): String {
+            if (fechaOriginal == null) return "Sin fecha"
+
             return try {
-                val inputFormat = SimpleDateFormat("d 'de' MMMM 'de' yyyy, h:mm:ss a z", Locale("es", "ES"))
-                val outputFormat = SimpleDateFormat("d 'de' MMMM 'de' yyyy 'a las' h:mm a", Locale("es", "ES"))
-                val date = inputFormat.parse(fechaOriginal)
-                date?.let { outputFormat.format(it) } ?: "Fecha no disponible"
+                val date = when (fechaOriginal) {
+                    is com.google.firebase.Timestamp -> fechaOriginal.toDate() // Convertir Timestamp a Date
+                    is Date -> fechaOriginal
+                    else -> return "Sin fecha"
+                }
+
+                val outputFormat =
+                    SimpleDateFormat("d 'de' MMMM 'a las' h:mm a", Locale("es", "ES"))
+                outputFormat.format(date)
             } catch (e: Exception) {
-                "Fecha no disponible"
+                "Sin fecha"
             }
         }
     }

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
@@ -39,8 +38,6 @@ class PantallaPrincipalActivity : AppCompatActivity() {
             view.setPadding(0, statusBarHeight - 8 , 0, 8)
             WindowInsetsCompat.CONSUMED
         }
-
-        val nombreToolbar = binding.nombreToolbar
 
         // Eliminar título de la Toolbar
         supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -133,4 +130,5 @@ class PantallaPrincipalActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
 }
