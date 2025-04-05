@@ -10,13 +10,16 @@ import com.bumptech.glide.Glide
 import com.example.asociacionpedrajeradepenas.databinding.ActivityDetallePenaBinding
 import com.google.firebase.firestore.FirebaseFirestore
 
-class DetallePenaActivity : AppCompatActivity() {
+class DetallePenaActivity : BaseActivity() {
+
     private lateinit var binding: ActivityDetallePenaBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetallePenaBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setupToolbar(binding.toolbar, binding.nombreToolbar)
 
         val idPeña = intent.getStringExtra("idPeña") ?: return
         val nombre = intent.getStringExtra("nombre") ?: ""

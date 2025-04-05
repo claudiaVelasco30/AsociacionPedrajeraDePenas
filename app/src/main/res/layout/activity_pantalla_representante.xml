@@ -6,15 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/fondo1"
-    tools:context=".PantallaMapaActivity">
+    tools:context=".PantallaRepresentanteActivity">
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="71dp">
+        android:orientation="vertical">
 
+        <!-- Toolbar personalizada -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -46,16 +46,24 @@
                 android:layout_alignParentTop="true"/>
         </androidx.appcompat.widget.Toolbar>
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/contenedorMapa"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="500dp" />
+            android:layout_height="match_parent"
+            app:cardCornerRadius="16dp"
+            android:background="@color/grisOscuro"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="80dp"
+            app:cardElevation="4dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/verdePrincipal"/>
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fragmentContainerView"
+                android:name="com.example.asociacionpedrajeradepenas.OpcionesRepFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
+        </androidx.cardview.widget.CardView>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

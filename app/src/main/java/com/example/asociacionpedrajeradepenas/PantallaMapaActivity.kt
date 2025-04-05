@@ -8,27 +8,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.asociacionpedrajeradepenas.databinding.ActivityPantallaMapaBinding
 
-class PantallaMapaActivity : AppCompatActivity() {
+class PantallaMapaActivity : BaseActivity() {
+
+    private lateinit var binding: ActivityPantallaMapaBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_pantalla_mapa)
+        binding = ActivityPantallaMapaBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
-
-        // Margen dinámico
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.toolbar)) { view, insets ->
-            val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
-            view.setPadding(0, statusBarHeight - 8 , 0, 8)
-            WindowInsetsCompat.CONSUMED
-        }
-
-        val nombreToolbar = findViewById<TextView>(R.id.nombreToolbar)
-
-        // Eliminar título de la Toolbar
-        supportActionBar?.setDisplayShowTitleEnabled(false)
+        setupToolbar(binding.toolbar, binding.nombreToolbar)
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.contenedorMapa, MapaFragment())

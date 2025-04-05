@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.asociacionpedrajeradepenas.ui.main.SectionsPagerAdapter
 import com.example.asociacionpedrajeradepenas.databinding.ActivityPantallaAdministradorBinding
 
-class PantallaAdministradorActivity : AppCompatActivity() {
+class PantallaAdministradorActivity : BaseActivity() {
 
     private lateinit var binding: ActivityPantallaAdministradorBinding
 
@@ -16,6 +16,8 @@ class PantallaAdministradorActivity : AppCompatActivity() {
 
         binding = ActivityPantallaAdministradorBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setupToolbar(binding.toolbar, binding.nombreToolbar)
 
         val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
         val viewPager: ViewPager = binding.viewPager
