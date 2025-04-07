@@ -27,7 +27,6 @@ class CrearFragment : Fragment() {
     private lateinit var storage: FirebaseStorage
     private lateinit var database: FirebaseFirestore
     private var imageUri: Uri? = null
-    private lateinit var userRole: String
 
 
     override fun onCreateView(
@@ -144,7 +143,6 @@ class CrearFragment : Fragment() {
 
         database.collection("Penas").document(idPena).set(pena).addOnSuccessListener {
             actualizarRolUsuario(idRepresentante, idPena)
-            crearSolicitud(idPena, idRepresentante)
         }
     }
 
@@ -154,18 +152,6 @@ class CrearFragment : Fragment() {
         userRef.update("rol", "representante").addOnSuccessListener {
             Toast.makeText(requireContext(), "Peña creada con éxito", Toast.LENGTH_SHORT).show()
         }
-    }
-
-    private fun crearSolicitud(idPena: String, idUsuario: String) {
-        val idSolicitud = database.collection("Solicitudes").document().id
-        val solicitud = hashMapOf(
-            "idSolicitud" to idSolicitud,
-            "estado" to "pendiente",
-            "idPeña" to idPena,
-            "idUsuario" to idUsuario
-        )
-
-        database.collection("solicitudes").document(idSolicitud).set(solicitud)
     }
 
     override fun onDestroyView() {

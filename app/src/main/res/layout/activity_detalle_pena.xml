@@ -140,10 +140,7 @@
                         app:strokeColor="@color/verdePrincipal"
                         app:strokeWidth="1dp" />
                 </LinearLayout>
-
             </ScrollView>
-
-
         </androidx.cardview.widget.CardView>
     </LinearLayout>
 

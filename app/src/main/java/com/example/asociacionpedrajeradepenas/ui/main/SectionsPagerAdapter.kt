@@ -4,11 +4,15 @@ import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.example.asociacionpedrajeradepenas.EventosAdminFragment
 import com.example.asociacionpedrajeradepenas.R
+import com.example.asociacionpedrajeradepenas.PenasAdminFragment
+import com.example.asociacionpedrajeradepenas.SolicitudesAdminFragment
 
 private val TAB_TITLES = arrayOf(
     R.string.tab_text_1,
-    R.string.tab_text_2
+    R.string.tab_text_2,
+    R.string.tab_text_3
 )
 
 /**
@@ -19,9 +23,12 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
     FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment.
-        return PlaceholderFragment.newInstance(position + 1)
+        return when (position) {
+            0 -> PenasAdminFragment()
+            1 -> EventosAdminFragment()
+            2 -> SolicitudesAdminFragment()
+            else -> PenasAdminFragment()
+        }
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
@@ -30,6 +37,6 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
 
     override fun getCount(): Int {
         // Show 2 total pages.
-        return 2
+        return 3
     }
 }
