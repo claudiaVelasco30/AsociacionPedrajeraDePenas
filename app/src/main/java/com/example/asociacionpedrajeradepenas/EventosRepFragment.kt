@@ -1,39 +1,38 @@
-package com.example.asociacionpedrajeradepenas.ui.eventos
+package com.example.asociacionpedrajeradepenas
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.asociacionpedrajeradepenas.EventoAdapter
-import com.example.asociacionpedrajeradepenas.databinding.FragmentEventosBinding
+import com.example.asociacionpedrajeradepenas.databinding.FragmentEventosRepBinding
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class EventosFragment : Fragment() {
+class EventosRepFragment : Fragment() {
 
-    private var _binding: FragmentEventosBinding? = null
+    private var _binding: FragmentEventosRepBinding? = null
     private val binding get() = _binding!!
     private val db = FirebaseFirestore.getInstance()
-    private lateinit var eventoAdapter: EventoAdapter
+    private lateinit var eventoAdapter: EventosRepAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentEventosBinding.inflate(inflater, container, false)
+    ): View? {
+        _binding = FragmentEventosRepBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.rvEventos.layoutManager = LinearLayoutManager(requireContext())
+        binding.rveventosrep.layoutManager = LinearLayoutManager(requireContext())
         cargarEventos()
     }
 
@@ -58,8 +57,8 @@ class EventosFragment : Fragment() {
                     }
                 }
 
-                eventoAdapter = EventoAdapter(listaEventos)
-                binding.rvEventos.adapter = eventoAdapter
+                eventoAdapter = EventosRepAdapter(listaEventos)
+                binding.rveventosrep.adapter = eventoAdapter
             }
     }
 
@@ -67,4 +66,5 @@ class EventosFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

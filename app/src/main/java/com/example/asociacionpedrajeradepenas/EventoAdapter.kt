@@ -36,14 +36,14 @@ class EventoAdapter(eventos: List<Map<String, Any>>) :
     override fun getItemCount(): Int = eventosOrdenados.size
 
     class EventoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val titulo: TextView = itemView.findViewById(R.id.tvTitulo)
+        private val nombre: TextView = itemView.findViewById(R.id.tvTitulo)
         private val descripcion: TextView = itemView.findViewById(R.id.tvDescripcion)
         private val fechaHora: TextView = itemView.findViewById(R.id.tvFechaHora)
         private val imagen: ImageView = itemView.findViewById(R.id.imgEvento)
         private val ubicacion: TextView = itemView.findViewById(R.id.tvUbicacion)
 
         fun bind(evento: Map<String, Any>) {
-            titulo.text = evento["nombre"] as? String ?: "Evento sin nombre"
+            nombre.text = evento["nombre"] as? String ?: "Evento sin nombre"
             descripcion.text = evento["descripcion"] as? String ?: "Sin descripción"
             ubicacion.text = evento["ubicacion"] as? String ?: "Ubicación no disponible"
 

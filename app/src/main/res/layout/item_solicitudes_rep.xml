@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:gravity="center_vertical"
+    android:layout_margin="8dp">
+
+    <TextView
+        android:id="@+id/nombreUsuario"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Nombre y apellidos"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="@android:color/black" />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp">
+
+        <Button
+            android:id="@+id/btnAceptarSolicitud"
+            android:layout_width="43dp"
+            android:layout_height="50dp"
+            android:backgroundTint="@color/verdePrincipal"
+            android:text=""
+            app:cornerRadius="100dp" />
+
+        <ImageView
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_gravity="center"
+            android:src="@drawable/outline_check_circle_24" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btnRechazarSolicitud"
+            android:layout_width="43dp"
+            android:layout_height="50dp"
+            android:backgroundTint="@color/verdePrincipal"
+            android:text=""
+            app:cornerRadius="100dp" />
+
+        <ImageView
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_gravity="center"
+            android:src="@drawable/outline_cancel_24" />
+    </FrameLayout>
+</LinearLayout>

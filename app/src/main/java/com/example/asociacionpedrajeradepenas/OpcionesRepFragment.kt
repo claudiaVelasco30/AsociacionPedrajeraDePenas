@@ -38,6 +38,20 @@ class OpcionesRepFragment : Fragment() {
         storage = FirebaseStorage.getInstance()
         database = FirebaseFirestore.getInstance()
 
+        binding.btnUnirseEvento.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainerView, EventosRepFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        binding.btnSolicitudesUnion.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainerView, SolicitudesRepFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
         binding.btnSubirFoto.setOnClickListener {
             seleccionarImagen()
         }
@@ -176,5 +190,4 @@ class OpcionesRepFragment : Fragment() {
     companion object {
         private const val REQUEST_CODE_IMAGE = 1
     }
-
 }
