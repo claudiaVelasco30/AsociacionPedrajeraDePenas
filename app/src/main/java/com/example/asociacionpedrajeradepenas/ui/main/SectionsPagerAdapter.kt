@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.example.asociacionpedrajeradepenas.EventosAdminFragment
 import com.example.asociacionpedrajeradepenas.R
 import com.example.asociacionpedrajeradepenas.PenasAdminFragment
-import com.example.asociacionpedrajeradepenas.SolicitudesAdminFragment
+import com.example.asociacionpedrajeradepenas.InscripcionesAdminFragment
 
 private val TAB_TITLES = arrayOf(
     R.string.tab_text_1,
@@ -26,7 +26,7 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
         return when (position) {
             0 -> PenasAdminFragment()
             1 -> EventosAdminFragment()
-            2 -> SolicitudesAdminFragment()
+            2 -> InscripcionesAdminFragment()
             else -> PenasAdminFragment()
         }
     }

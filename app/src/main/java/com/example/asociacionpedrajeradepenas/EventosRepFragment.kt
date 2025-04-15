@@ -24,7 +24,7 @@ class EventosRepFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentEventosRepBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -46,7 +46,9 @@ class EventosRepFragment : Fragment() {
                 val fechaActual = sdf.parse(sdf.format(Date()))
 
                 for (document in result) {
-                    val evento = document.data
+                    val evento = document.data.toMutableMap()
+                    evento["idEvento"] = document.id
+
                     val timestamp = evento["fecha_hora"] as? Timestamp
 
                     if (timestamp != null) {

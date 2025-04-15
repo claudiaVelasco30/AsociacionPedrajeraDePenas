@@ -46,7 +46,7 @@ class PenasFragment : Fragment() {
                 val listaPenas = mutableListOf<Map<String, Any>>()
                 for (document in result) {
                     val penaData = document.data.toMutableMap()
-                    penaData["id"] = document.id // Guardamos el ID del documento
+                    penaData["id"] = document.id
                     listaPenas.add(penaData)
                 }
                 penasList.clear()

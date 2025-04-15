@@ -1,5 +1,6 @@
 package com.example.asociacionpedrajeradepenas
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -30,6 +31,10 @@ class EventosAdminFragment : Fragment() {
 
         binding.rveventosadmin.layoutManager = LinearLayoutManager(requireContext())
         cargarEventos()
+
+        binding.btnCrearEvento.setOnClickListener {
+            startActivity(Intent(requireContext(), CrearEventoActivity::class.java))
+        }
     }
 
     private fun cargarEventos() {
@@ -37,9 +42,13 @@ class EventosAdminFragment : Fragment() {
             .addOnSuccessListener { result ->
                 val listaEventos = mutableListOf<Map<String, Any>>()
                 for (document in result) {
-                    listaEventos.add(document.data)
+                    val eventoMap = document.data.toMutableMap()
+                    eventoMap["idEvento"] = document.id
+                    listaEventos.add(eventoMap)
                 }
-                eventoAdapter = EventosAdminAdapter(listaEventos)
+                eventoAdapter = EventosAdminAdapter(listaEventos){
+                    cargarEventos()
+                }
                 binding.rveventosadmin.adapter = eventoAdapter
             }
     }
