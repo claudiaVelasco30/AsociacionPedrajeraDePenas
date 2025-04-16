@@ -44,7 +44,7 @@ class CrearFragment : Fragment() {
         }
 
         binding.btnCrearPena.setOnClickListener {
-            val nombre = binding.editTextNombrePena.text.toString().trim()
+            val nombre = binding.editTextNombrePena.text.toString()
             val ubicacion = binding.editTextUbicacion.text.toString().trim()
 
             binding.editTextNombrePena.setText("")
@@ -99,7 +99,7 @@ class CrearFragment : Fragment() {
         try {
             val direccionCompleta = "$ubicacion, Pedrajas de San Esteban, España"
             val addresses = geocoder.getFromLocationName(direccionCompleta, 1)
-            if (addresses != null && addresses.isNotEmpty()) {
+            if (!addresses.isNullOrEmpty()) {
                 val lat = addresses[0].latitude
                 val lon = addresses[0].longitude
                 subirImagenYGuardarPena(nombre, ubicacion, lat, lon)

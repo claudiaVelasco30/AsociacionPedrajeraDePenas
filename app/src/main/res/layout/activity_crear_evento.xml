@@ -19,31 +19,31 @@
             android:layout_height="wrap_content"
             android:background="@color/verdePrincipal"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:titleTextColor="@android:color/white"
-            app:layout_scrollFlags="scroll|enterAlways"
             tools:ignore="MissingConstraints">
 
             <ImageView
                 android:id="@+id/iconoUsuario"
                 android:layout_width="46dp"
                 android:layout_height="46dp"
-                android:src="@drawable/outline_supervised_user_circle_24"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="10dp"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"/>
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/outline_supervised_user_circle_24" />
 
             <TextView
                 android:id="@+id/nombreToolbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nombre y apellidos"
-                android:textColor="@color/white"
-                android:textSize="24sp"
+                android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
-                android:layout_alignParentTop="true"/>
+                android:text="Nombre y apellidos"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
         </androidx.appcompat.widget.Toolbar>
 
         <LinearLayout
@@ -66,7 +66,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/editTextNombreEvento"
+                android:id="@+id/etNombreEvento"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@color/white"
@@ -88,7 +88,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/editTextDescripcion"
+                android:id="@+id/etDescripcion"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@color/white"
@@ -116,7 +116,7 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/editTextFotoEvento"
+                    android:id="@+id/etFotoEvento"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
@@ -149,7 +149,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/editTextUbicacion"
+                android:id="@+id/etUbicacion"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@color/white"
@@ -172,7 +172,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/editTextFecha"
+                android:id="@+id/etFecha"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@color/white"
@@ -195,7 +195,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/editTextHora"
+                android:id="@+id/etHora"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@color/white"
@@ -208,7 +208,7 @@
                 android:textColor="@color/black" />
 
             <Button
-                android:id="@+id/btnCrearPena"
+                android:id="@+id/btnCrearEvento"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="40dp"
@@ -218,7 +218,5 @@
                 android:textSize="16sp" />
 
         </LinearLayout>
-
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

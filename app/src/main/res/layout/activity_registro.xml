@@ -8,7 +8,6 @@
     tools:context=".RegistroActivity"
     android:background="@color/fondo1">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,7 +35,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/editTextNombre"
+            android:id="@+id/etNombre"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@color/white"
@@ -58,7 +57,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/editTextApellidos"
+            android:id="@+id/etApellidos"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@color/white"
@@ -80,7 +79,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/editTextEmail"
+            android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@color/white"
@@ -103,7 +102,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/editTextPassword"
+            android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@color/white"
@@ -125,7 +124,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/editTextPassword2"
+            android:id="@+id/etPassword2"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@color/white"

@@ -18,8 +18,8 @@
         <ImageView
             android:id="@+id/imgEvento"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:scaleType="fitCenter"
+            android:layout_height="180dp"
+            android:scaleType="centerCrop"
             android:src="@drawable/outline_image_24" />
 
         <TextView
@@ -47,12 +47,12 @@
             android:id="@+id/tvUbicacion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:text="Ubicación"
-            android:textSize="14sp"
             android:textColor="@android:color/black"
-            android:layout_marginTop="4dp"/>
+            android:textSize="14sp" />
 
 
         <TextView

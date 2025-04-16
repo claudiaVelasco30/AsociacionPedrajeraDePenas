@@ -53,7 +53,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/editTextNombrePena"
+            android:id="@+id/etNombrePena"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@color/white"
@@ -81,7 +81,7 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/editTextFoto"
+                android:id="@+id/etFoto"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"
@@ -114,7 +114,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/editTextUbicacion"
+            android:id="@+id/etUbicacion"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@color/white"

@@ -44,8 +44,8 @@ class MainActivity : AppCompatActivity() {
             )
             .build()
 
-        val etEmail = findViewById<EditText>(R.id.editTextEmail)
-        val etPassword = findViewById<EditText>(R.id.editTextPassword)
+        val etEmail = findViewById<EditText>(R.id.etEmail)
+        val etPassword = findViewById<EditText>(R.id.etPassword)
         val btnIniciarSesion = findViewById<Button>(R.id.btnIniciarSesion)
         val btnRegistro = findViewById<Button>(R.id.btnRegistro)
         val btnGoogle = findViewById<Button>(R.id.btnGoogle)

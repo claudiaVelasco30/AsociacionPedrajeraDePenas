@@ -23,11 +23,11 @@ class RegistroActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
-        val etNombre = findViewById<EditText>(R.id.editTextNombre)
-        val etApellidos = findViewById<EditText>(R.id.editTextApellidos)
-        val etEmail = findViewById<EditText>(R.id.editTextEmail)
-        val etPassword = findViewById<EditText>(R.id.editTextPassword)
-        val etPassword2 = findViewById<EditText>(R.id.editTextPassword2)
+        val etNombre = findViewById<EditText>(R.id.etNombre)
+        val etApellidos = findViewById<EditText>(R.id.etApellidos)
+        val etEmail = findViewById<EditText>(R.id.etEmail)
+        val etPassword = findViewById<EditText>(R.id.etPassword)
+        val etPassword2 = findViewById<EditText>(R.id.etPassword2)
         val btnCrearCuenta = findViewById<Button>(R.id.btnCrearCuenta)
 
         btnCrearCuenta.setOnClickListener {

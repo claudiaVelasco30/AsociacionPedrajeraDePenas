@@ -28,8 +28,8 @@ class PenasAdminAdapter(private val penas:List<Map<String, Any>>,
     override fun getItemCount(): Int = penas.size
 
     class PenaViewHolder(itemView: View, private val onPenaEliminada: () -> Unit) : RecyclerView.ViewHolder(itemView) {
-        private val nombre: TextView = itemView.findViewById(R.id.nombrePena)
-        private val imagen: ImageView = itemView.findViewById(R.id.imagenPena)
+        private val nombre: TextView = itemView.findViewById(R.id.tvNombrePena)
+        private val imagen: ImageView = itemView.findViewById(R.id.imgPena)
         private val btnEliminar: Button = itemView.findViewById(R.id.btnEliminarPena)
 
         fun bind(pena: Map<String, Any>) {

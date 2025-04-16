@@ -50,7 +50,7 @@ class EventoAdapter(eventos: List<Map<String, Any>>) :
             val fechaOriginal = evento["fecha_hora"]
             fechaHora.text = formatearFecha(fechaOriginal)
 
-            val imagenUrl = evento["imagenUrl"] as? String
+            val imagenUrl = evento["imagen"] as? String
             if (!imagenUrl.isNullOrEmpty()) {
                 Glide.with(itemView.context).load(imagenUrl).into(imagen)
             }

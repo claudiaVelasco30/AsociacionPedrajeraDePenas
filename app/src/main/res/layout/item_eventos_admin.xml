@@ -10,16 +10,17 @@
     android:orientation="horizontal"
     android:padding="8dp">
 
-    <ImageView
-        android:id="@+id/imagenEvento"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imgEvento"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginEnd="10dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/outline_image_24" />
+        android:src="@drawable/outline_image_24"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Circle" />
 
     <TextView
-        android:id="@+id/nombreEvento"
+        android:id="@+id/tvNombreEvento"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"

@@ -26,7 +26,7 @@ class SolicitudesAdapter (private val solicitudes: List<Map<String, Any>>,
     override fun getItemCount(): Int = solicitudes.size
 
     class SolicitudViewHolder(itemView: View, private val onSolicitudEliminada: () -> Unit) : RecyclerView.ViewHolder(itemView) {
-        private val nombre: TextView = itemView.findViewById(R.id.nombreUsuario)
+        private val nombre: TextView = itemView.findViewById(R.id.tvNombreUsuario)
         private val btnAceptar = itemView.findViewById<Button>(R.id.btnAceptarSolicitud)
         private val btnRechazar = itemView.findViewById<Button>(R.id.btnRechazarSolicitud)
         private val db = FirebaseFirestore.getInstance()

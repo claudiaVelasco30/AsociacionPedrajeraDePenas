@@ -38,8 +38,8 @@ class EventosRepAdapter (eventos: List<Map<String, Any>>) :
     override fun getItemCount(): Int = eventosOrdenados.size
 
     class EventoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val nombre: TextView = itemView.findViewById(R.id.nombreEvento)
-        private val imagen: ImageView = itemView.findViewById(R.id.imagenEvento)
+        private val nombre: TextView = itemView.findViewById(R.id.tvNombreEvento)
+        private val imagen: ImageView = itemView.findViewById(R.id.imgEvento)
         private val btnUnirse: Button = itemView.findViewById(R.id.btnUnirseEvento)
 
         fun bind(evento: Map<String, Any>) {
