@@ -15,7 +15,7 @@ class PantallaAdministradorActivity : BaseActivity() {
         binding = ActivityPantallaAdministradorBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupToolbar(binding.toolbar, binding.nombreToolbar)
+        setupToolbar(binding.toolbar, binding.nombreToolbar, binding.iconoUsuario)
 
         val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
         val viewPager: ViewPager = binding.viewPager

@@ -19,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : AppCompatActivity() {
 
+    // Variables para autenticación con Firebase y Google One Tap
     private lateinit var auth: FirebaseAuth
     private lateinit var oneTapClient: SignInClient
     private lateinit var signInRequest: BeginSignInRequest
@@ -37,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         signInRequest = BeginSignInRequest.builder()
             .setGoogleIdTokenRequestOptions(
                 BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                    .setSupported(true)
+                    .setSupported(true) // Habilita el inicio con ID token
                     .setServerClientId(getString(R.string.default_web_client_id)) // ID de cliente de Firebase
                     .setFilterByAuthorizedAccounts(false) // Permite seleccionar cualquier cuenta de Google
                     .build()
@@ -53,85 +54,114 @@ class MainActivity : AppCompatActivity() {
         btnIniciarSesion.setOnClickListener {
             val email = etEmail.text.toString().trim()
             val password = etPassword.text.toString().trim()
+            var datosValidos = true
 
-            if (email.isNotEmpty() && password.isNotEmpty()) {
-                loginUser(email, password)
-            } else {
-                Toast.makeText(this, "Por favor, completa los campos", Toast.LENGTH_SHORT).show()
+            if (email.isEmpty()) {
+                etEmail.error = "El correo es obligatorio"
+                datosValidos = false
+            }
+
+            if (password.isEmpty()) {
+                etPassword.error = "La contraseña es obligatoria"
+                datosValidos = false
+            }
+
+            if (datosValidos) {
+                iniciarSesion(email, password)
             }
         }
 
         btnRegistro.setOnClickListener {
+            // Navega a la pantalla de registro
             startActivity(Intent(this, RegistroActivity::class.java))
             finish()
         }
 
         btnGoogle.setOnClickListener {
-            signInWithGoogle()
+            iniciarConGoogle()
         }
     }
 
-    private fun loginUser(email: String, password: String) {
+    // Función para iniciar sesión con correo y contraseña
+    private fun iniciarSesion(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                val intent = Intent(this, PantallaPrincipalActivity::class.java)
-                startActivity(intent)
+                // Si inicia sesión correctamente, navega a la pantalla principal
+                startActivity(Intent(this, PantallaPrincipalActivity::class.java))
             } else {
-                Toast.makeText(this, "Error: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                // Muestra error si no se pudo iniciar sesión
+                Toast.makeText(this, "Error al iniciar sesión", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun signInWithGoogle() {
-        val googleConf = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
+    // Función para iniciar sesión con Google
+    private fun iniciarConGoogle() {
+        // Configura opciones de inicio de sesión con Google
+        val googleConfig = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id)) // ID del cliente web de Firebase
+            .requestEmail() // Solicita acceso al email del usuario
             .build()
-        val googleClient = GoogleSignIn.getClient(this, googleConf)
-        startActivityForResult(googleClient.signInIntent, 100)
-        googleClient.signOut()
+        val clienteGoogle = GoogleSignIn.getClient(this, googleConfig)
+        startActivityForResult(clienteGoogle.signInIntent, 100)
+        clienteGoogle.signOut()
     }
 
+    // Método que se llama cuando vuelve de la actividad de selección de cuenta de Google
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 100) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-                val account = task.getResult(ApiException::class.java)
-                if (account != null) {
-                    val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-                    auth.signInWithCredential(credential).addOnCompleteListener { result ->
-                        if (result.isSuccessful) {
-                            val user = auth.currentUser
-                            user?.let {
-                                guardarUsuarioEnFirestore(it.uid, it.displayName ?: "Usuario", it.email ?: "")
-                            }
-                            Toast.makeText(this, "Inicio de sesión con Google exitoso", Toast.LENGTH_SHORT).show()
-                            startActivity(Intent(this, PantallaPrincipalActivity::class.java))
-                            finish()
-                        } else {
-                            Toast.makeText(this, "Error: ${result.exception?.message}", Toast.LENGTH_SHORT).show()
+
+            val cuenta =
+                task.getResult(ApiException::class.java) // Obtiene la cuenta seleccionada
+            if (cuenta != null) {
+                // Obtiene la credencial de Firebase a partir del ID Token de Google
+                val credencial = GoogleAuthProvider.getCredential(cuenta.idToken, null)
+
+                // Inicia sesión con Firebase usando la credencial de Google
+                auth.signInWithCredential(credencial).addOnCompleteListener { result ->
+                    if (result.isSuccessful) {
+                        val usuario = auth.currentUser
+                        usuario?.let {
+                            // Guarda los datos del usuario en Firestore
+                            guardarUsuarioEnFirestore(
+                                it.uid,
+                                it.displayName ?: "Usuario",
+                                it.email ?: ""
+                            )
                         }
+                        startActivity(Intent(this, PantallaPrincipalActivity::class.java))
+                        finish()
+                    } else {
+                        Toast.makeText(
+                            this,
+                            "Error al iniciar sesión",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
-            } catch (e: ApiException) {
-                Toast.makeText(this, "Error al iniciar sesión con Google", Toast.LENGTH_SHORT).show()
             }
+
         }
     }
 
+    // Guarda la información del usuario en Firestore si no existe
     private fun guardarUsuarioEnFirestore(uid: String, nombre: String, email: String) {
-        val userRef = database.collection("Usuarios").document(uid)
-        userRef.get().addOnSuccessListener { document ->
+        val usuarios = database.collection("Usuarios").document(uid)
+
+        // Verifica si el documento del usuario existe
+        usuarios.get().addOnSuccessListener { document ->
             if (!document.exists()) {
-                val user = hashMapOf(
+                // Si no existe, lo crea con los datos por defecto
+                val usuario = hashMapOf(
                     "idUsuario" to uid,
                     "nombre" to nombre,
                     "email" to email,
                     "rol" to "usuario",
                     "idPeña" to null
                 )
-                userRef.set(user)
+                usuarios.set(usuario)
             }
         }
     }

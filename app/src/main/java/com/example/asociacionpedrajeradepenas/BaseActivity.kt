@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -25,7 +27,7 @@ open class BaseActivity : AppCompatActivity() {
         obtenerRolUsuario()
     }
 
-    protected fun setupToolbar(toolbar: Toolbar, nombreToolbar: TextView) {
+    protected fun setupToolbar(toolbar: Toolbar, nombreToolbar: TextView, imagenToolbar: ShapeableImageView) {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
@@ -37,10 +39,11 @@ open class BaseActivity : AppCompatActivity() {
         }
 
         // Obtener y mostrar el nombre del usuario
-        obtenerNombreUsuario(nombreToolbar)
+        obtenerNombreImagen(nombreToolbar, imagenToolbar)
+
     }
 
-    private fun obtenerNombreUsuario(nombreToolbar: TextView) {
+    private fun obtenerNombreImagen(nombreToolbar: TextView, imagenToolbar: ShapeableImageView) {
         val user = auth.currentUser
         if (user != null) {
             db.collection("Usuarios").document(user.uid)
@@ -48,16 +51,30 @@ open class BaseActivity : AppCompatActivity() {
                 .addOnSuccessListener { document ->
                     if (document.exists()) {
                         val nombreUsuario = document.getString("nombre") ?: "Nombre"
+                        val idPena = document.getString("idPeña")
                         nombreToolbar.text = nombreUsuario
+
+                        if (!idPena.isNullOrEmpty()) {
+                            db.collection("Penas").document(idPena)
+                                .get()
+                                .addOnSuccessListener { penaDoc ->
+                                    if (penaDoc.exists()) {
+                                        val urlImagen = penaDoc.getString("imagen")
+                                        if (!urlImagen.isNullOrEmpty()) {
+                                            Glide.with(imagenToolbar.context)
+                                                .load(urlImagen)
+                                                .into(imagenToolbar)
+                                        }
+                                    }
+                                }
+                        }
                     }
-                }
-                .addOnFailureListener {
-                    nombreToolbar.text = "Error"
                 }
         }
     }
 
-    private fun obtenerRolUsuario() {
+
+    protected fun obtenerRolUsuario() {
         val user = auth.currentUser
         if (user != null) {
             db.collection("Usuarios").document(user.uid)

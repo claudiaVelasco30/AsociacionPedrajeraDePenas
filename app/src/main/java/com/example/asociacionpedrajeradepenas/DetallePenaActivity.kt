@@ -19,7 +19,7 @@ class DetallePenaActivity : BaseActivity() {
         binding = ActivityDetallePenaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupToolbar(binding.toolbar, binding.nombreToolbar)
+        setupToolbar(binding.toolbar, binding.nombreToolbar, binding.iconoUsuario)
 
         val idPeña = intent.getStringExtra("idPeña") ?: return
         val nombre = intent.getStringExtra("nombre") ?: ""

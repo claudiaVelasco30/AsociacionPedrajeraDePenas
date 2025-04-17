@@ -34,7 +34,7 @@ class CrearEventoActivity : BaseActivity() {
         database = FirebaseFirestore.getInstance()
 
         // Configurar Toolbar reutilizando la lógica del BaseActivity
-        setupToolbar(binding.toolbar, binding.nombreToolbar)
+        setupToolbar(binding.toolbar, binding.nombreToolbar, binding.iconoUsuario)
 
         binding.btnSubirFoto.setOnClickListener {
             seleccionarImagen()

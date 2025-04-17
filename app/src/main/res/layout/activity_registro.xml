@@ -18,11 +18,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/imageView"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            app:srcCompat="@drawable/logo_circulo" />
+            android:layout_height="wrap_content"
+            android:gravity="center" >
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageView"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Circle"
+                app:srcCompat="@drawable/logo" />
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"

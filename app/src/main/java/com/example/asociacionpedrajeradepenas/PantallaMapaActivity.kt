@@ -19,7 +19,7 @@ class PantallaMapaActivity : BaseActivity() {
         binding = ActivityPantallaMapaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupToolbar(binding.toolbar, binding.nombreToolbar)
+        setupToolbar(binding.toolbar, binding.nombreToolbar, binding.iconoUsuario)
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.contenedorMapa, MapaFragment())

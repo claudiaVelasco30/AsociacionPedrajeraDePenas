@@ -9,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import android.util.Patterns
 
 class RegistroActivity : AppCompatActivity() {
 
@@ -37,42 +38,81 @@ class RegistroActivity : AppCompatActivity() {
             val password = etPassword.text.toString().trim()
             val password2 = etPassword2.text.toString().trim()
 
-            if (nombre.isEmpty() || apellidos.isEmpty() || email.isEmpty() || password.isEmpty() || password2.isEmpty()) {
-                Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+            var esValido = true
+
+            // Limpiar errores anteriores
+            etNombre.error = null
+            etApellidos.error = null
+            etEmail.error = null
+            etPassword.error = null
+            etPassword2.error = null
+
+            // Validaciones de campos
+            if (nombre.isEmpty()) {
+                etNombre.error = "El nombre es obligatorio"
+                esValido = false
             }
 
-            if (password.length < 6) {
-                Toast.makeText(this, "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+            if (apellidos.isEmpty()) {
+                etApellidos.error = "Los apellidos son obligatorios"
+                esValido = false
             }
 
-            if (password != password2) {
-                Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+            if (email.isEmpty()) {
+                etEmail.error = "El correo es obligatorio"
+                esValido = false
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                etEmail.error = "Formato de correo no válido"
+                esValido = false
             }
 
-            registerUser(nombre, apellidos, email, password)
+            if (password.isEmpty()) {
+                etPassword.error = "La contraseña es obligatoria"
+                esValido = false
+            } else if (password.length < 6) {
+                etPassword.error = "Debe tener al menos 6 caracteres"
+                esValido = false
+            }
+
+            if (password2.isEmpty()) {
+                etPassword2.error = "Repite la contraseña"
+                esValido = false
+            } else if (password != password2) {
+                etPassword2.error = "Las contraseñas no coinciden"
+                esValido = false
+            }
+
+            // Si todo está correcto se crea la cuenta
+            if (esValido) {
+                registerUser(nombre, apellidos, email, password)
+            }
         }
     }
 
+    // Función para registrar el usuario en Firebase
     private fun registerUser(nombre: String, apellidos: String, email: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    val user = auth.currentUser
-                    if (user != null) {
-                        val idUsuario = user.uid
-                        saveUserToFirestore(idUsuario, nombre, apellidos, email)
+                    val usuario = auth.currentUser
+                    if (usuario != null) {
+                        val idUsuario = usuario.uid
+                        guardarUsuarioEnFirestore(idUsuario, nombre, apellidos, email)
                     }
                 } else {
-                    Toast.makeText(this, "Error: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Error al registrarse", Toast.LENGTH_SHORT).show()
                 }
             }
     }
 
-    private fun saveUserToFirestore(idUsuario: String, nombre: String, apellidos: String, email: String) {
-        val userMap = hashMapOf(
+    // Función para guardar los datos del usuario en Firestore
+    private fun guardarUsuarioEnFirestore(
+        idUsuario: String,
+        nombre: String,
+        apellidos: String,
+        email: String
+    ) {
+        val usuario = hashMapOf(
             "idUsuario" to idUsuario,
             "nombre" to nombre,
             "apellidos" to apellidos,
@@ -81,14 +121,15 @@ class RegistroActivity : AppCompatActivity() {
             "idPeña" to null
         )
 
-        db.collection("Usuarios").document(idUsuario).set(userMap)
+        // Guardar en la colección "Usuarios"
+        db.collection("Usuarios").document(idUsuario).set(usuario)
             .addOnSuccessListener {
                 Toast.makeText(this, "Cuenta creada con éxito", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, PantallaPrincipalActivity::class.java)
                 startActivity(intent)
             }
             .addOnFailureListener {
-                Toast.makeText(this, "Error al guardar usuario", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Error al registrarse", Toast.LENGTH_SHORT).show()
             }
     }
 }

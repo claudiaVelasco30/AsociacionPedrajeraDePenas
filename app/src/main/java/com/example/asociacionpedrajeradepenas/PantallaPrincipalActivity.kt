@@ -18,7 +18,7 @@ class PantallaPrincipalActivity : BaseActivity() {
         setContentView(binding.root)
 
         // Configurar Toolbar reutilizando la lógica del BaseActivity
-        setupToolbar(binding.toolbar, binding.nombreToolbar)
+        setupToolbar(binding.toolbar, binding.nombreToolbar, binding.iconoUsuario)
 
         // Configuración de la navegación inferior
         val navController = findNavController(R.id.nav_host_fragment_activity_pantalla_principal)
