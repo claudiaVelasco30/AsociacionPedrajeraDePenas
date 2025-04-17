@@ -1,4 +1,4 @@
-package com.example.asociacionpedrajeradepenas.ui.eventos
+package com.example.asociacionpedrajeradepenas
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.asociacionpedrajeradepenas.EventoAdapter
 import com.example.asociacionpedrajeradepenas.databinding.FragmentEventosBinding
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore

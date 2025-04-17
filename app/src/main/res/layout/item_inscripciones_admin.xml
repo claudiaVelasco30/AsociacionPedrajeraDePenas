@@ -1,82 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardBackgroundColor="@android:color/white"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="4dp"
-    app:strokeColor="@color/verdePrincipal"
-    app:strokeWidth="2dp">
+    android:background="@drawable/dialogo_redondeado_blanco"
+    android:orientation="vertical"
+    android:padding="12dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="12dp">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/imgPena"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="10dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/outline_image_24"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Circle" />
-
-            <TextView
-                android:id="@+id/tvNombrePena"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nombre de la peña"
-                android:textColor="@android:color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </LinearLayout>
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgPena"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/outline_image_24"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Circle" />
 
         <TextView
-            android:id="@+id/tvMensaje"
-            android:layout_width="match_parent"
+            android:id="@+id/tvNombrePena"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="La peña X quiere unirse al evento Y"
+            android:text="Nombre de la peña"
             android:textColor="@android:color/black"
-            android:textSize="14sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="end"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnRechazar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
-                android:text="Rechazar"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                app:strokeColor="@color/verdePrincipal"
-                app:strokeWidth="1dp" />
-
-            <Button
-                android:id="@+id/btnAceptar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:backgroundTint="@color/verdePrincipal"
-                android:text="Aceptar"
-                android:textColor="@android:color/white"
-                android:textSize="14sp" />
-        </LinearLayout>
+            android:textSize="18sp"
+            android:textStyle="bold" />
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/tvMensaje"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="La peña X quiere unirse al evento Y"
+        android:textColor="@android:color/black"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnRechazar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:text="Rechazar"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            app:strokeColor="@color/verdePrincipal"
+            app:strokeWidth="1dp" />
+
+        <Button
+            android:id="@+id/btnAceptar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="@color/verdePrincipal"
+            android:text="Aceptar"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
+</LinearLayout>

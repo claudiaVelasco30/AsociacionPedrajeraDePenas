@@ -1,16 +1,15 @@
-package com.example.asociacionpedrajeradepenas.ui.penas
+package com.example.asociacionpedrajeradepenas
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.asociacionpedrajeradepenas.DetallePenaActivity
-import com.example.asociacionpedrajeradepenas.PenaAdapter
 import com.example.asociacionpedrajeradepenas.databinding.FragmentPenasBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -58,7 +57,7 @@ class PenasFragment : Fragment() {
     private fun actualizarRecyclerView() {
         penaAdapter = PenaAdapter(penasList,
             onInfoClick = { pena -> abrirDetallePena(pena) },
-            onUnirseClick = { pena -> mostrarDialogoUnirse(pena) }
+            onUnirseClick = { pena -> mostrarDialogoUnirse(pena["nombre"].toString()) }
         )
         binding.rvpenas.adapter = penaAdapter
     }
@@ -74,26 +73,31 @@ class PenasFragment : Fragment() {
         startActivity(intent)
     }
 
-    private fun mostrarDialogoUnirse(pena: Map<String, Any>) {
-        val idUsuario = auth.currentUser?.uid ?: return
+    private fun mostrarDialogoUnirse(nombrePena: String) {
+        val dialogView = layoutInflater.inflate(R.layout.dialogo_principal, null)
 
-        // Verificar si el usuario ya pertenece a una peña
-        db.collection("Usuarios").document(idUsuario).get().addOnSuccessListener { document ->
-            val idPeñaUsuario = document.getString("idPeña")
-            if (!idPeñaUsuario.isNullOrEmpty()) {
-                Toast.makeText(requireContext(), "Ya perteneces a una peña", Toast.LENGTH_SHORT).show()
-                return@addOnSuccessListener
-            }
+        val titulo = dialogView.findViewById<TextView>(R.id.tituloDialogo)
+        val mensaje = dialogView.findViewById<TextView>(R.id.mensajeDialogo)
+        val btnAceptar = dialogView.findViewById<TextView>(R.id.btnAceptar)
+        val btnCancelar = dialogView.findViewById<TextView>(R.id.btnCancelar)
 
-            // Mostrar AlertDialog para confirmar unión
-            AlertDialog.Builder(requireContext())
-                .setTitle("Unirse a peña")
-                .setMessage("¿Deseas realizar una solicitud para unirte a la peña ${pena["nombre"]}?")
-                .setNegativeButton("Cancelar", null)
-                .setPositiveButton("Aceptar") { _, _ ->
-                    crearSolicitud(pena["id"] as String, idUsuario)
-                }
-                .show()
+        titulo.text = "Unirse a peña"
+        mensaje.text = "¿Deseas realizar una solicitud para unirte a la peña $nombrePena?"
+
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent) // fondo sin esquinas rectas
+        alertDialog.show()
+
+        btnCancelar.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        btnAceptar.setOnClickListener {
+            //crearSolicitud()
+            alertDialog.dismiss()
         }
     }
 

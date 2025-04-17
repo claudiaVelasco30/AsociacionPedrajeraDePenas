@@ -57,12 +57,12 @@ class OpcionesRepFragment : Fragment() {
         }
 
         binding.btnModificarInfo.setOnClickListener {
-            val nombre = binding.editTextNombrePena.text.toString().trim()
-            val ubicacion = binding.editTextUbicacion.text.toString().trim()
+            val nombre = binding.etNombrePena.text.toString().trim()
+            val ubicacion = binding.etUbicacion.text.toString().trim()
 
-            binding.editTextNombrePena.setText("")
-            binding.editTextUbicacion.setText("")
-            binding.editTextFoto.setText("")
+            binding.etNombrePena.setText("")
+            binding.etUbicacion.setText("")
+            binding.etFoto.setText("")
 
             if (nombre.isEmpty() && ubicacion.isEmpty() && imageUri == null) {
                 Toast.makeText(requireContext(), "No has modificado ningún campo", Toast.LENGTH_SHORT).show()
@@ -95,7 +95,7 @@ class OpcionesRepFragment : Fragment() {
             if (imageUri != null) {
                 // Obtener el nombre del archivo desde la URI y mostrarlo en el EditText
                 val nombreArchivo = obtenerNombreArchivo(imageUri!!)
-                binding.editTextFoto.setText(nombreArchivo) // Asigna el nombre al EditText
+                binding.etFoto.setText(nombreArchivo) // Asigna el nombre al EditText
             }
         }
     }

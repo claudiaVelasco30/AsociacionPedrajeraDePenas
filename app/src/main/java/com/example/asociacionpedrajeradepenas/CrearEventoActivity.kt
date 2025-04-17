@@ -41,24 +41,24 @@ class CrearEventoActivity : BaseActivity() {
         }
 
         binding.btnCrearEvento.setOnClickListener {
-            val nombre = binding.editTextNombreEvento.text.toString().trim()
-            val descripcion = binding.editTextDescripcion.text.toString().trim()
-            val ubicacion = binding.editTextUbicacion.text.toString().trim()
+            val nombre = binding.etNombreEvento.text.toString().trim()
+            val descripcion = binding.etDescripcion.text.toString().trim()
+            val ubicacion = binding.etUbicacion.text.toString().trim()
 
-            val fecha = binding.editTextFecha.text.toString().trim()
-            val hora = binding.editTextHora.text.toString().trim()
+            val fecha = binding.etFecha.text.toString().trim()
+            val hora = binding.etHora.text.toString().trim()
             val fechaHoraString = "$fecha $hora"
 
             if (nombre.isNotEmpty() && ubicacion.isNotEmpty() && fecha.isNotEmpty() && hora.isNotEmpty() && imageUri != null) {
                 subirImagenYGuardarEvento(nombre, descripcion, ubicacion, fechaHoraString)
 
                 // Limpiar campos después de crear
-                binding.editTextNombreEvento.setText("")
-                binding.editTextDescripcion.setText("")
-                binding.editTextUbicacion.setText("")
-                binding.editTextFotoEvento.setText("")
-                binding.editTextFecha.setText("")
-                binding.editTextHora.setText("")
+                binding.etNombreEvento.setText("")
+                binding.etDescripcion.setText("")
+                binding.etUbicacion.setText("")
+                binding.etFotoEvento.setText("")
+                binding.etFecha.setText("")
+                binding.etHora.setText("")
             } else {
                 Toast.makeText(this, "Completa los campos obligatorios", Toast.LENGTH_SHORT).show()
             }
@@ -76,7 +76,7 @@ class CrearEventoActivity : BaseActivity() {
             imageUri = data.data
             imageUri?.let {
                 val nombreArchivo = obtenerNombreArchivo(it)
-                binding.editTextFotoEvento.setText(nombreArchivo)
+                binding.etFotoEvento.setText(nombreArchivo)
             }
         }
     }
@@ -113,14 +113,16 @@ class CrearEventoActivity : BaseActivity() {
         val fechaDate: Date = formatoFecha.parse(fechaHora)!!
         val fechaFirestore = Timestamp(fechaDate)
 
+
         val evento = hashMapOf(
             "idEvento" to idEvento,
             "nombre" to nombre,
-            "descripcion" to descripcion,
+            "descripcion" to descripcion.takeIf { it.isNotBlank() },
             "ubicacion" to ubicacion,
             "imagen" to imageUrl,
             "fecha_hora" to fechaFirestore
         )
+
 
         database.collection("Eventos").document(idEvento).set(evento)
             .addOnSuccessListener {

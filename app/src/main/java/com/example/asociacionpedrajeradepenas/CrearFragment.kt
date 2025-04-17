@@ -1,4 +1,4 @@
-package com.example.asociacionpedrajeradepenas.ui.crear
+package com.example.asociacionpedrajeradepenas
 
 import android.app.Activity
 import android.content.Intent
@@ -44,12 +44,12 @@ class CrearFragment : Fragment() {
         }
 
         binding.btnCrearPena.setOnClickListener {
-            val nombre = binding.editTextNombrePena.text.toString()
-            val ubicacion = binding.editTextUbicacion.text.toString().trim()
+            val nombre = binding.etNombrePena.text.toString()
+            val ubicacion = binding.etUbicacion.text.toString().trim()
 
-            binding.editTextNombrePena.setText("")
-            binding.editTextUbicacion.setText("")
-            binding.editTextFoto.setText("")
+            binding.etNombrePena.setText("")
+            binding.etUbicacion.setText("")
+            binding.etFoto.setText("")
 
             if (nombre.isNotEmpty() && imageUri != null) {
                 if (ubicacion.isNotEmpty()) {
@@ -77,7 +77,7 @@ class CrearFragment : Fragment() {
             if (imageUri != null) {
                 // Obtener el nombre del archivo desde la URI y mostrarlo en el EditText
                 val nombreArchivo = obtenerNombreArchivo(imageUri!!)
-                binding.editTextFoto.setText(nombreArchivo) // Asigna el nombre al EditText
+                binding.etFoto.setText(nombreArchivo) // Asigna el nombre al EditText
             }
         }
     }

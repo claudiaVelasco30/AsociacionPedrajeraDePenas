@@ -3,8 +3,6 @@ package com.example.asociacionpedrajeradepenas
 import android.os.Bundle
 import com.google.android.material.tabs.TabLayout
 import androidx.viewpager.widget.ViewPager
-import androidx.appcompat.app.AppCompatActivity
-import com.example.asociacionpedrajeradepenas.ui.main.SectionsPagerAdapter
 import com.example.asociacionpedrajeradepenas.databinding.ActivityPantallaAdministradorBinding
 
 class PantallaAdministradorActivity : BaseActivity() {
