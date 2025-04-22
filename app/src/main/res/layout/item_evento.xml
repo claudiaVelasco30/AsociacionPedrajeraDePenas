@@ -30,6 +30,7 @@
             android:paddingTop="8dp"
             android:paddingEnd="8dp"
             android:text="Título del evento"
+            android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -40,7 +41,7 @@
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:text="Fecha y hora"
-            android:textColor="#646464"
+            android:textColor="#3C3C3C"
             android:textSize="14sp" />
 
         <TextView
@@ -65,6 +66,20 @@
             android:paddingEnd="8dp"
             android:paddingBottom="8dp"
             android:text="Descripción del evento"
+            android:textColor="#626262"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvPenas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="8dp"
+            android:textColor="#3C3C3C"
+            android:text="Peñas que participan: Ninguna"
             android:textSize="14sp" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

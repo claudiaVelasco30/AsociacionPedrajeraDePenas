@@ -106,7 +106,7 @@ class PenasFragment : Fragment() {
         val btnCancelar = dialogo.findViewById<TextView>(R.id.btnCancelar)
 
         titulo.text = "Unirse a peña"
-        mensaje.text = "¿Deseas realizar una solicitud para unirte a la peña $nombrePena?"
+        mensaje.text = "¿Deseas realizar una solicitud para unirte a la peña \"$nombrePena\"?"
 
         val alertDialog = AlertDialog.Builder(requireContext())
             .setView(dialogo)

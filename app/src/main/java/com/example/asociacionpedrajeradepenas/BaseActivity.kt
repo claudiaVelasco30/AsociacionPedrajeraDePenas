@@ -159,7 +159,7 @@ open class BaseActivity : AppCompatActivity() {
         val btnCancelar = dialogo.findViewById<TextView>(R.id.btnCancelar)
 
         titulo.text = "Abandonar peña"
-        mensaje.text = "¿Estás seguro de que quieres abandonar la peña $nombrePenaUsuario?"
+        mensaje.text = "¿Estás seguro de que quieres abandonar la peña \"$nombrePenaUsuario\"?"
 
         val alertDialog = AlertDialog.Builder(this)
             .setView(dialogo)

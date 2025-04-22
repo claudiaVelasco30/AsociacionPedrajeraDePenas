@@ -7,6 +7,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.firebase.firestore.FieldPath
+import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -46,20 +48,48 @@ class EventoAdapter(eventos: List<Map<String, Any>>) :
         private val fechaHora: TextView = itemView.findViewById(R.id.tvFechaHora)
         private val imagen: ImageView = itemView.findViewById(R.id.imgEvento)
         private val ubicacion: TextView = itemView.findViewById(R.id.tvUbicacion)
+        private val listaPenas: TextView = itemView.findViewById(R.id.tvPenas)
+
+        private val db = FirebaseFirestore.getInstance()
 
         // Asigna los datos del evento a las vistas
         fun bind(evento: Map<String, Any>) {
             nombre.text = evento["nombre"] as? String ?: "Evento sin nombre"
             descripcion.text = evento["descripcion"] as? String ?: "Sin descripción"
             ubicacion.text = evento["ubicacion"] as? String ?: "Ubicación no disponible"
-
-            val fechaOriginal = evento["fecha_hora"]
-            fechaHora.text = formatearFecha(fechaOriginal)
+            fechaHora.text = formatearFecha(evento["fecha_hora"])
 
             val imagenUrl = evento["imagen"] as? String
             if (!imagenUrl.isNullOrEmpty()) {
                 Glide.with(itemView.context).load(imagenUrl).into(imagen)
             }
+
+            val idEvento = evento["idEvento"] as? String ?: return
+            mostrarPenasParticipantes(idEvento)
+        }
+
+        // Muestra los nombres de las peñas que participan
+        private fun mostrarPenasParticipantes(idEvento: String) {
+            db.collection("Inscripciones")
+                .whereEqualTo("idEvento", idEvento)
+                .whereEqualTo("estado", "aceptada")
+                .get()
+                .addOnSuccessListener { inscripciones ->
+                    val idPenas = inscripciones.documents.mapNotNull { it.getString("idPeña") }
+
+                    if (idPenas.isEmpty()) {
+                        listaPenas.text = "Peñas que participan: Ninguna"
+                        return@addOnSuccessListener
+                    }
+
+                    db.collection("Penas")
+                        .whereIn(FieldPath.documentId(), idPenas)
+                        .get()
+                        .addOnSuccessListener { penas ->
+                            val nombres = penas.documents.mapNotNull { it.getString("nombre") }
+                            listaPenas.text = "Peñas que participan: ${nombres.joinToString(", ")}"
+                        }
+                }
         }
 
         // Formatea la fecha para mostrarla
