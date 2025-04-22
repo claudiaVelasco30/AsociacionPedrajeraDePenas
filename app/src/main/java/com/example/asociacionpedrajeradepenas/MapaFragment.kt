@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +28,6 @@ class MapaFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var mapa: GoogleMap
     private val db = FirebaseFirestore.getInstance()
-    private val marcadorPeñaMap = mutableMapOf<String, String>()
 
 
     override fun onCreateView(
@@ -42,21 +40,35 @@ class MapaFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
+
+        // Comprobamos si se ha pasado una peña desde DetallePenaActivity
+        val idPenaMostrar = activity?.intent?.getStringExtra("idPenaMostrar")
+        if (!idPenaMostrar.isNullOrEmpty()) {
+            mostrarInfoPeña(idPenaMostrar)
+        }
     }
 
     override fun onMapReady(googlemap: GoogleMap) {
+        // Inicializa el mapa cuando está listo
         mapa = googlemap
+
+        // Centra el mapa en la ubicación del pueblo Pedrajas de San Esteban
         val centroMapa = LatLng(41.342386, -4.582162)
         mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(centroMapa, 15f))
 
+        // Carga los marcadores de todas las peñas desde Firebase
         cargarPeñas()
 
+        // Oculta la información de la peña si se hace click fuera del marcador
         mapa.setOnMapClickListener {
-            val contenedorInfo = requireActivity().findViewById<FrameLayout>(R.id.contenedorInfoPena)
+            val contenedorInfo =
+                requireActivity().findViewById<FrameLayout>(R.id.contenedorInfoPena)
             contenedorInfo.removeAllViews()
         }
 
+        // Muestra la info de la peña si se hace click en un marcador
         mapa.setOnMarkerClickListener { marker ->
+            marker.showInfoWindow()
             val idPeña = marker.tag as? String
             if (idPeña != null) {
                 mostrarInfoPeña(idPeña)
@@ -66,6 +78,7 @@ class MapaFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun cargarPeñas() {
+        // Consulta todas las peñas en Firebase
         db.collection("Penas").get().addOnSuccessListener { documents ->
             for (document in documents) {
                 val nombre = document.getString("nombre") ?: "Peña sin nombre"
@@ -84,7 +97,7 @@ class MapaFragment : Fragment(), OnMapReadyCallback {
                         MarkerOptions().position(ubicacion).title(nombre)
                     )
 
-                    // Asociar el ID de la peña al marker usando su tag
+                    // Asociar el id de la peña al marker usando su tag
                     marcador?.tag = idPeña
                 }
 
@@ -93,6 +106,7 @@ class MapaFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun mostrarInfoPeña(idPeña: String) {
+        // Muestra la vista con información de la peña en la parte inferior
         val contenedorInfo = requireActivity().findViewById<FrameLayout>(R.id.contenedorInfoPena)
         contenedorInfo.removeAllViews()
 
@@ -146,6 +160,7 @@ class MapaFragment : Fragment(), OnMapReadyCallback {
         startActivity(intent)
     }
 
+    // Muestra el diálogo para unirse a una peña
     private fun mostrarDialogoUnion(idPeña: String) {
         AlertDialog.Builder(requireContext())
             .setTitle("Unirse a la peña")

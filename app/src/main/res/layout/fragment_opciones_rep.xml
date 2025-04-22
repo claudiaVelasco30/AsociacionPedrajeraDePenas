@@ -120,6 +120,7 @@
             android:background="@color/white"
             android:backgroundTint="@color/white"
             android:ems="10"
+            android:hint="Calle Mayor, 12"
             android:inputType="textPostalAddress"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"

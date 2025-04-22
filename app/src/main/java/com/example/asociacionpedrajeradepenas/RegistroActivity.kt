@@ -37,7 +37,6 @@ class RegistroActivity : AppCompatActivity() {
             val email = etEmail.text.toString().trim()
             val password = etPassword.text.toString().trim()
             val password2 = etPassword2.text.toString().trim()
-
             var esValido = true
 
             // Limpiar errores anteriores

@@ -27,16 +27,19 @@ class InscripcionesAdminFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.rvinscripciones.layoutManager = LinearLayoutManager(requireContext())
 
-        //CAMBIAR
-        binding.rvsolicitudesadmin.layoutManager = LinearLayoutManager(requireContext())
+        // Carga las inscripciones desde Firebase
         cargarInscripciones()
     }
 
+    // Función que carga las inscripciones pendientes desde Firestore
     private fun cargarInscripciones() {
         db.collection("Inscripciones").get()
             .addOnSuccessListener { result ->
                 val listaInscripciones = mutableListOf<Map<String, String>>()
+
+                // Filtra solo aquellas inscripciones que estén en estado "pendiente"
                 val inscripcionesPendientes = result.documents.filter {
                     it.getString("estado") == "pendiente"
                 }
@@ -53,6 +56,7 @@ class InscripcionesAdminFragment : Fragment() {
                                 val nombreEvento =
                                     eventoDoc.getString("nombre") ?: "Evento desconocido"
 
+                                // Se crea un mapa con los datos que se mostrarán en el RecyclerView
                                 val inscripcionMap = mapOf(
                                     "idInscripcion" to document.id,
                                     "nombrePena" to nombrePena,
@@ -61,11 +65,11 @@ class InscripcionesAdminFragment : Fragment() {
                                 )
                                 listaInscripciones.add(inscripcionMap)
 
-                                inscripcionAdapter = InscripcionesAdapter(listaInscripciones){
-                                    cargarInscripciones()
+                                // Se crea el adaptador y se asigna al RecyclerView
+                                inscripcionAdapter = InscripcionesAdapter(listaInscripciones) {
+                                    cargarInscripciones() // Recarga la lista tras aceptar o rechazar la inscripción
                                 }
-                                binding.rvsolicitudesadmin.adapter = inscripcionAdapter
-
+                                binding.rvinscripciones.adapter = inscripcionAdapter
                             }
                     }
                 }

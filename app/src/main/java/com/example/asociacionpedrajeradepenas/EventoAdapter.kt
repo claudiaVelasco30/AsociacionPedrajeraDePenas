@@ -14,27 +14,32 @@ import java.util.Locale
 class EventoAdapter(eventos: List<Map<String, Any>>) :
     RecyclerView.Adapter<EventoAdapter.EventoViewHolder>() {
 
+    // Ordena los eventos por fecha descendente
     private val eventosOrdenados = eventos.sortedByDescending { evento ->
         val fecha = evento["fecha_hora"]
         when (fecha) {
             is com.google.firebase.Timestamp -> fecha.toDate().time // Convertir Timestamp a milisegundos
-            is Date -> fecha.time
-            else -> Long.MIN_VALUE // Si no hay fecha, ponerlo al final
+            is Date -> fecha.time // Si ya es Date, tomar los milisegundos
+            else -> Long.MIN_VALUE // Si no tiene fecha válida, se coloca al final
         }
     }
 
+    // Crea la vista para cada ítem del RecyclerView
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventoViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_evento, parent, false)
         return EventoViewHolder(view)
     }
 
+    // Asocia los datos del evento con la vista del ViewHolder
     override fun onBindViewHolder(holder: EventoViewHolder, position: Int) {
         val evento = eventosOrdenados[position]
         holder.bind(evento)
     }
 
+    // Devuelve el número total de eventos
     override fun getItemCount(): Int = eventosOrdenados.size
 
+    // Clase que representa el ViewHolder de cada evento
     class EventoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val nombre: TextView = itemView.findViewById(R.id.tvTitulo)
         private val descripcion: TextView = itemView.findViewById(R.id.tvDescripcion)
@@ -42,6 +47,7 @@ class EventoAdapter(eventos: List<Map<String, Any>>) :
         private val imagen: ImageView = itemView.findViewById(R.id.imgEvento)
         private val ubicacion: TextView = itemView.findViewById(R.id.tvUbicacion)
 
+        // Asigna los datos del evento a las vistas
         fun bind(evento: Map<String, Any>) {
             nombre.text = evento["nombre"] as? String ?: "Evento sin nombre"
             descripcion.text = evento["descripcion"] as? String ?: "Sin descripción"
@@ -56,6 +62,7 @@ class EventoAdapter(eventos: List<Map<String, Any>>) :
             }
         }
 
+        // Formatea la fecha para mostrarla
         private fun formatearFecha(fechaOriginal: Any?): String {
             if (fechaOriginal == null) return "Sin fecha"
 
@@ -66,9 +73,9 @@ class EventoAdapter(eventos: List<Map<String, Any>>) :
                     else -> return "Sin fecha"
                 }
 
-                val outputFormat =
+                val fechaConFormato =
                     SimpleDateFormat("d 'de' MMMM 'a las' h:mm a", Locale("es", "ES"))
-                outputFormat.format(date)
+                fechaConFormato.format(date)
             } catch (e: Exception) {
                 "Sin fecha"
             }

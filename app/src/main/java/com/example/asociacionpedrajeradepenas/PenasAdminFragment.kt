@@ -29,9 +29,12 @@ class PenasAdminFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.rvpenasadmin.layoutManager = LinearLayoutManager(requireContext())
+
+        // Llamamos al metodo que carga las peñas desde Firestore
         cargarPenas()
     }
 
+    // Metodo para obtener la lista de peñas almacenadas en la colección "Penas" de Firestore
     private fun cargarPenas() {
         db.collection("Penas").get()
             .addOnSuccessListener { result ->
@@ -42,9 +45,12 @@ class PenasAdminFragment : Fragment() {
                     listaPenas.add(penaMap)
                 }
 
-                penaAdapter = PenasAdminAdapter(listaPenas){
-                    cargarPenas()
+                // Inicializamos el adaptador pasándole la lista de peñas
+                penaAdapter = PenasAdminAdapter(listaPenas) {
+                    cargarPenas() // Recarga la lista si se realiza una acción
                 }
+
+                // Asignamos el adaptador al RecyclerView
                 binding.rvpenasadmin.adapter = penaAdapter
             }
     }

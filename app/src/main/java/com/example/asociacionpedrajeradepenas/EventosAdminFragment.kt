@@ -30,13 +30,17 @@ class EventosAdminFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.rveventosadmin.layoutManager = LinearLayoutManager(requireContext())
+
+        // Se cargan los eventos desde Firestore
         cargarEventos()
 
+        // Al hacer clic en el botón "Crear Evento", se abre la actividad correspondiente
         binding.btnCrearEvento.setOnClickListener {
             startActivity(Intent(requireContext(), CrearEventoActivity::class.java))
         }
     }
 
+    // Función para obtener los eventos de Firestore y mostrarlos en el RecyclerView
     private fun cargarEventos() {
         db.collection("Eventos").get()
             .addOnSuccessListener { result ->
@@ -46,8 +50,10 @@ class EventosAdminFragment : Fragment() {
                     eventoMap["idEvento"] = document.id
                     listaEventos.add(eventoMap)
                 }
-                eventoAdapter = EventosAdminAdapter(listaEventos){
-                    cargarEventos()
+
+                // Se crea y asigna el adaptador al RecyclerView
+                eventoAdapter = EventosAdminAdapter(listaEventos) {
+                    cargarEventos() // Se recarga la lista tras eliminar un evento
                 }
                 binding.rveventosadmin.adapter = eventoAdapter
             }
@@ -57,5 +63,4 @@ class EventosAdminFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }

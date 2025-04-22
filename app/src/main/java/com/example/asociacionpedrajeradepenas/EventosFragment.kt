@@ -20,6 +20,7 @@ class EventosFragment : Fragment() {
     private val db = FirebaseFirestore.getInstance()
     private lateinit var eventoAdapter: EventoAdapter
 
+    // Se infla la vista del fragment
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -29,20 +30,29 @@ class EventosFragment : Fragment() {
         return binding.root
     }
 
+    // Se ejecuta cuando la vista ya está creada
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Configuración del RecyclerView
         binding.rvEventos.layoutManager = LinearLayoutManager(requireContext())
+
+        // Carga los eventos desde Firestore
         cargarEventos()
     }
 
+    // Función para cargar los eventos desde la colección "Eventos"
     private fun cargarEventos() {
         db.collection("Eventos").get()
             .addOnSuccessListener { result ->
-                val listaEventos = mutableListOf<Map<String, Any>>()
-                val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val listaEventos =
+                    mutableListOf<Map<String, Any>>() // Lista para almacenar eventos válidos
+                val sdf = SimpleDateFormat(
+                    "yyyy-MM-dd",
+                    Locale.getDefault()
+                ) // Formato para comparar fechas
 
-                // Obtener la fecha actual sin hora
+                // Se obtene la fecha actual sin hora
                 val fechaActual = sdf.parse(sdf.format(Date()))
 
                 for (document in result) {
@@ -50,13 +60,17 @@ class EventosFragment : Fragment() {
                     val timestamp = evento["fecha_hora"] as? Timestamp
 
                     if (timestamp != null) {
+                        // Formateo de la fecha del evento para eliminar la hora
                         val fechaEvento = sdf.parse(sdf.format(timestamp.toDate()))
+
+                        // Se agregan los eventos cuya fecha sea igual o posterior a la fecha actual
                         if (fechaEvento != null && !fechaEvento.before(fechaActual)) {
                             listaEventos.add(evento)
                         }
                     }
                 }
 
+                // Crear y asignar el adaptador con los eventos
                 eventoAdapter = EventoAdapter(listaEventos)
                 binding.rvEventos.adapter = eventoAdapter
             }

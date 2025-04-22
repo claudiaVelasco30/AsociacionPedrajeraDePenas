@@ -33,9 +33,10 @@ class CrearEventoActivity : BaseActivity() {
         storage = FirebaseStorage.getInstance()
         database = FirebaseFirestore.getInstance()
 
-        // Configurar Toolbar reutilizando la lógica del BaseActivity
+        // Configura la Toolbar reutilizando la lógica del BaseActivity
         setupToolbar(binding.toolbar, binding.nombreToolbar, binding.iconoUsuario)
 
+        // Al pulsar el botón de subir foto, se abre la galería para seleccionar imagen
         binding.btnSubirFoto.setOnClickListener {
             seleccionarImagen()
         }
@@ -49,6 +50,7 @@ class CrearEventoActivity : BaseActivity() {
             val hora = binding.etHora.text.toString().trim()
             val fechaHoraString = "$fecha $hora"
 
+            // Valida que todos los campos obligatorios estén completos
             if (nombre.isNotEmpty() && ubicacion.isNotEmpty() && fecha.isNotEmpty() && hora.isNotEmpty() && imageUri != null) {
                 subirImagenYGuardarEvento(nombre, descripcion, ubicacion, fechaHoraString)
 
@@ -65,11 +67,13 @@ class CrearEventoActivity : BaseActivity() {
         }
     }
 
+    // Abre la galería del dispositivo para seleccionar una imagen
     private fun seleccionarImagen() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(intent, REQUEST_CODE_IMAGE)
     }
 
+    // Se ejecuta cuando el usuario selecciona una imagen
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
@@ -81,6 +85,7 @@ class CrearEventoActivity : BaseActivity() {
         }
     }
 
+    // Obtiene el nombre del archivo desde la URI seleccionada
     private fun obtenerNombreArchivo(uri: Uri): String {
         var nombre = "desconocido.jpg"
         val cursor = contentResolver.query(uri, null, null, null, null)
@@ -93,12 +98,24 @@ class CrearEventoActivity : BaseActivity() {
         return nombre
     }
 
-    private fun subirImagenYGuardarEvento(nombre: String, descripcion: String, ubicacion: String, fechaHora: String) {
+    // Sube la imagen seleccionada a Firebase Storage y luego guarda el evento en Firestore
+    private fun subirImagenYGuardarEvento(
+        nombre: String,
+        descripcion: String,
+        ubicacion: String,
+        fechaHora: String
+    ) {
         val storageRef = storage.reference.child("imagenes/${UUID.randomUUID()}.jpg")
         imageUri?.let { uri ->
             storageRef.putFile(uri).addOnSuccessListener {
                 storageRef.downloadUrl.addOnSuccessListener { imageUrl ->
-                    guardarEventoEnFirestore(nombre, descripcion, ubicacion, fechaHora, imageUrl.toString())
+                    guardarEventoEnFirestore(
+                        nombre,
+                        descripcion,
+                        ubicacion,
+                        fechaHora,
+                        imageUrl.toString()
+                    )
                 }
             }.addOnFailureListener {
                 Toast.makeText(this, "Error al subir la imagen", Toast.LENGTH_SHORT).show()
@@ -106,7 +123,14 @@ class CrearEventoActivity : BaseActivity() {
         }
     }
 
-    private fun guardarEventoEnFirestore(nombre: String, descripcion: String, ubicacion: String, fechaHora: String, imageUrl: String) {
+    // Guarda los datos del evento en la colección "Eventos" de Firestore
+    private fun guardarEventoEnFirestore(
+        nombre: String,
+        descripcion: String,
+        ubicacion: String,
+        fechaHora: String,
+        imageUrl: String
+    ) {
         val idEvento = database.collection("Eventos").document().id
 
         val formatoFecha = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
@@ -133,6 +157,7 @@ class CrearEventoActivity : BaseActivity() {
             }
     }
 
+    // Constante para identificar el resultado del selector de imágenes
     companion object {
         private const val REQUEST_CODE_IMAGE = 1
     }

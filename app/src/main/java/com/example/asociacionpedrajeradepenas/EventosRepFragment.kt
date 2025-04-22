@@ -31,15 +31,19 @@ class EventosRepFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.rveventosrep.layoutManager = LinearLayoutManager(requireContext())
+
+        // Carga los eventos desde Firestore
         cargarEventos()
     }
 
+    // Función que carga los eventos desde Firestore y filtra los eventos ya pasados
     private fun cargarEventos() {
         db.collection("Eventos").get()
             .addOnSuccessListener { result ->
                 val listaEventos = mutableListOf<Map<String, Any>>()
+
+                // Formato para comparar fechas sin horas
                 val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
                 // Obtener la fecha actual sin hora
@@ -49,8 +53,10 @@ class EventosRepFragment : Fragment() {
                     val evento = document.data.toMutableMap()
                     evento["idEvento"] = document.id
 
+                    // Extrae la fecha del evento como Timestamp
                     val timestamp = evento["fecha_hora"] as? Timestamp
 
+                    // Filtra los eventos que aún no han ocurrido
                     if (timestamp != null) {
                         val fechaEvento = sdf.parse(sdf.format(timestamp.toDate()))
                         if (fechaEvento != null && !fechaEvento.before(fechaActual)) {
@@ -68,5 +74,4 @@ class EventosRepFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }

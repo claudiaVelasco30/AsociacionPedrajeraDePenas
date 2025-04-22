@@ -42,8 +42,7 @@ class MainActivity : AppCompatActivity() {
                     .setServerClientId(getString(R.string.default_web_client_id)) // ID de cliente de Firebase
                     .setFilterByAuthorizedAccounts(false) // Permite seleccionar cualquier cuenta de Google
                     .build()
-            )
-            .build()
+            ).build()
 
         val etEmail = findViewById<EditText>(R.id.etEmail)
         val etPassword = findViewById<EditText>(R.id.etPassword)

@@ -18,6 +18,7 @@ class PantallaRepresentanteActivity : BaseActivity() {
         binding = ActivityPantallaRepresentanteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Configuración de la Toolbar reutilizando la lógica del BaseActivity
         setupToolbar(binding.toolbar, binding.nombreToolbar, binding.iconoUsuario)
     }
 }

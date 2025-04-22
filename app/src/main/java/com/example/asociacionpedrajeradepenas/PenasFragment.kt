@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,9 +19,10 @@ class PenasFragment : Fragment() {
     private val binding get() = _binding!!
     private val db = FirebaseFirestore.getInstance()
     private lateinit var penaAdapter: PenaAdapter
-    private val auth = FirebaseAuth.getInstance()
     private val penasList = mutableListOf<Map<String, Any>>()
+    private var idPenaUsuario: String? = null
 
+    // Se infla la vista del fragment
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,13 +32,27 @@ class PenasFragment : Fragment() {
         return binding.root
     }
 
+    // Configuración del RecyclerView al crear la vista
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.rvpenas.layoutManager = LinearLayoutManager(requireContext())
-        cargarPenas()
+
+        // Obtener el id del usuario
+        val idUsuario = FirebaseAuth.getInstance().currentUser?.uid
+
+        if(idUsuario != null){
+            db.collection("Usuarios").document(idUsuario).get()
+                .addOnSuccessListener { document ->
+                    idPenaUsuario = document.getString("idPeña")
+
+                    // Carga las peñas desde Firestore
+                    cargarPenas()
+                }
+        }
     }
 
+    // Carga los documentos de la colección 'Penas' desde Firestore
     private fun cargarPenas() {
         db.collection("Penas").get()
             .addOnSuccessListener { result ->
@@ -50,20 +64,26 @@ class PenasFragment : Fragment() {
                 }
                 penasList.clear()
                 penasList.addAll(listaPenas)
+
+                // Se muestra la lista en el RecyclerView
                 actualizarRecyclerView()
             }
     }
 
+    // Configuración del RecyclerView con el adaptador y los listeners para los botones
     private fun actualizarRecyclerView() {
-        penaAdapter = PenaAdapter(penasList,
+        penaAdapter = PenaAdapter(
+            penasList,
+            idPenaUsuario,
             onInfoClick = { pena -> abrirDetallePena(pena) },
-            onUnirseClick = { pena -> mostrarDialogoUnirse(pena["nombre"].toString()) }
+            onUnirseClick = { pena -> mostrarDialogoUnirse(pena) }
         )
         binding.rvpenas.adapter = penaAdapter
     }
 
+    // Abre una nueva Activity con los detalles de la peña seleccionada
     private fun abrirDetallePena(pena: Map<String, Any>) {
-        val intent =  Intent(requireContext(), DetallePenaActivity::class.java).apply {
+        val intent = Intent(requireContext(), DetallePenaActivity::class.java).apply {
             putExtra("idPeña", pena["id"] as? String)
             putExtra("nombre", pena["nombre"] as? String)
             putExtra("ubicacion", pena["ubicación"] as? String)
@@ -73,22 +93,26 @@ class PenasFragment : Fragment() {
         startActivity(intent)
     }
 
-    private fun mostrarDialogoUnirse(nombrePena: String) {
-        val dialogView = layoutInflater.inflate(R.layout.dialogo_principal, null)
+    // Muestra un AlertDialog personalizado para confirmar la unión a la peña
+    private fun mostrarDialogoUnirse(pena: Map<String, Any>) {
+        val nombrePena = pena["nombre"].toString()
+        val idPena = pena["id"].toString()
 
-        val titulo = dialogView.findViewById<TextView>(R.id.tituloDialogo)
-        val mensaje = dialogView.findViewById<TextView>(R.id.mensajeDialogo)
-        val btnAceptar = dialogView.findViewById<TextView>(R.id.btnAceptar)
-        val btnCancelar = dialogView.findViewById<TextView>(R.id.btnCancelar)
+        val dialogo = layoutInflater.inflate(R.layout.dialogo_principal, null)
+
+        val titulo = dialogo.findViewById<TextView>(R.id.tituloDialogo)
+        val mensaje = dialogo.findViewById<TextView>(R.id.mensajeDialogo)
+        val btnAceptar = dialogo.findViewById<TextView>(R.id.btnAceptar)
+        val btnCancelar = dialogo.findViewById<TextView>(R.id.btnCancelar)
 
         titulo.text = "Unirse a peña"
         mensaje.text = "¿Deseas realizar una solicitud para unirte a la peña $nombrePena?"
 
         val alertDialog = AlertDialog.Builder(requireContext())
-            .setView(dialogView)
+            .setView(dialogo)
             .create()
 
-        alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent) // fondo sin esquinas rectas
+        alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         alertDialog.show()
 
         btnCancelar.setOnClickListener {
@@ -96,11 +120,15 @@ class PenasFragment : Fragment() {
         }
 
         btnAceptar.setOnClickListener {
-            //crearSolicitud()
+            val idUsuario = FirebaseAuth.getInstance().currentUser?.uid
+            if (idUsuario != null) {
+                crearSolicitud(idPena, idUsuario)
+            }
             alertDialog.dismiss()
         }
     }
 
+    // Crea un documento en la colección 'Solicitudes' con los datos del usuario y la peña
     private fun crearSolicitud(idPeña: String, idUsuario: String) {
         val solicitud = hashMapOf(
             "idPeña" to idPeña,
@@ -109,12 +137,6 @@ class PenasFragment : Fragment() {
         )
 
         db.collection("Solicitudes").add(solicitud)
-            .addOnSuccessListener {
-                Toast.makeText(requireContext(), "Solicitud enviada", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener {
-                Toast.makeText(requireContext(), "Error al enviar solicitud", Toast.LENGTH_SHORT).show()
-            }
     }
 
     override fun onDestroyView() {

@@ -21,12 +21,15 @@ class DetallePenaActivity : BaseActivity() {
 
         setupToolbar(binding.toolbar, binding.nombreToolbar, binding.iconoUsuario)
 
+        // Recupera los datos enviados desde la actividad anterior mediante el intent
         val idPeña = intent.getStringExtra("idPeña") ?: return
         val nombre = intent.getStringExtra("nombre") ?: ""
         val ubicacion = intent.getStringExtra("ubicacion") ?: ""
-        val representante = obtenerNombreRepresentante(intent.getStringExtra("idRepresentante") ?: "Desconocido")
+        val representante =
+            obtenerNombreRepresentante(intent.getStringExtra("idRepresentante") ?: "Desconocido")
         val imagenUrl = intent.getStringExtra("imagen")
 
+        // Asigna los datos recibidos a los elementos de la interfaz
         binding.tvNombrePena.text = nombre
         binding.tvUbicacionPena.text = ubicacion
         binding.tvRepresentantePena.text = representante.toString()
@@ -35,22 +38,30 @@ class DetallePenaActivity : BaseActivity() {
             Glide.with(this).load(imagenUrl).into(binding.imgPena)
         }
 
+        // Carga la lista de integrantes desde Firestore
         cargarIntegrantes(idPeña)
 
+        // Al pulsar el botón, se abre la pantalla del mapa
         binding.btnMapa.setOnClickListener {
-            startActivity(Intent(this, PantallaMapaActivity::class.java))
+            val intent = Intent(this, PantallaMapaActivity::class.java)
+            intent.putExtra("idPenaMostrar", idPeña)
+            startActivity(intent)
         }
     }
 
+    // Función que carga los integrantes de la peña desde la colección "Usuarios"
     private fun cargarIntegrantes(idPeña: String) {
         val db = FirebaseFirestore.getInstance()
         db.collection("Usuarios").whereEqualTo("idPeña", idPeña).get()
             .addOnSuccessListener { result ->
-                val listaIntegrantes = result.documents.mapNotNull {" - " + it.getString("nombre") + " " + it.getString("apellidos") }
+                val listaIntegrantes = result.documents.mapNotNull {
+                    " - " + it.getString("nombre") + " " + it.getString("apellidos")
+                }
                 binding.tvIntegrantesPena.text = listaIntegrantes.joinToString("\n")
             }
     }
 
+    // Función que obtiene el nombre completo del representante a partir de su id
     private fun obtenerNombreRepresentante(idRepresentante: String) {
         val db = FirebaseFirestore.getInstance()
         db.collection("Usuarios").document(idRepresentante).get()

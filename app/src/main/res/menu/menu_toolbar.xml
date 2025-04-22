@@ -12,6 +12,11 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_abandonar"
+        android:title="Abandonar peña"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_logout"
         android:title="Cerrar sesión"
         app:showAsAction="never" />

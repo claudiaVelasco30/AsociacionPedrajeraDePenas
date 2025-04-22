@@ -11,12 +11,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 
-class InscripcionesAdapter (private val inscripciones: List<Map<String, Any>>,
-                            private val onInscripcionEliminada: () -> Unit
+class InscripcionesAdapter(
+    private val inscripciones: List<Map<String, Any>>,
+    private val onInscripcionEliminada: () -> Unit
 ) : RecyclerView.Adapter<InscripcionesAdapter.InscripcionViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InscripcionViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_inscripciones_admin, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_inscripciones_admin, parent, false)
         return InscripcionViewHolder(view, onInscripcionEliminada)
     }
 
@@ -27,7 +29,9 @@ class InscripcionesAdapter (private val inscripciones: List<Map<String, Any>>,
 
     override fun getItemCount(): Int = inscripciones.size
 
-    class InscripcionViewHolder(itemView: View, private val onInscripcionEliminada: () -> Unit) : RecyclerView.ViewHolder(itemView) {
+    // ViewHolder que gestiona los elementos del layout para cada inscripción
+    class InscripcionViewHolder(itemView: View, private val onInscripcionEliminada: () -> Unit) :
+        RecyclerView.ViewHolder(itemView) {
         private val texto: TextView = itemView.findViewById(R.id.tvMensaje)
         private val nombre: TextView = itemView.findViewById(R.id.tvNombrePena)
         private val imagen: ImageView = itemView.findViewById(R.id.imgPena)
@@ -35,6 +39,7 @@ class InscripcionesAdapter (private val inscripciones: List<Map<String, Any>>,
         private val btnRechazar = itemView.findViewById<Button>(R.id.btnRechazar)
         private val db = FirebaseFirestore.getInstance()
 
+        // Función que recibe un mapa con los datos de una inscripción y los aplica al layout
         fun bind(inscripcion: Map<String, Any>) {
             val nombrePena = inscripcion["nombrePena"] ?: "Peña desconocida"
             val nombreEvento = inscripcion["nombreEvento"] ?: "Evento desconocido"
@@ -48,30 +53,48 @@ class InscripcionesAdapter (private val inscripciones: List<Map<String, Any>>,
                 Glide.with(itemView.context).load(imagenUrl).into(imagen)
             }
 
+            // Botón para aceptar la inscripción
             btnAceptar.setOnClickListener {
                 idInscripcion?.let { id ->
                     db.collection("Inscripciones").document(id.toString())
                         .update("estado", "aceptada")
                         .addOnSuccessListener {
-                            Toast.makeText(itemView.context, "Inscripción aceptada", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                itemView.context,
+                                "Inscripción aceptada",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             onInscripcionEliminada()
                         }
                         .addOnFailureListener {
-                            Toast.makeText(itemView.context, "Error al aceptar la inscripción", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                itemView.context,
+                                "Error al aceptar la inscripción",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                 }
             }
 
+            // Botón para rechazar la inscripción
             btnRechazar.setOnClickListener {
                 idInscripcion?.let { id ->
                     db.collection("Inscripciones").document(id.toString())
                         .update("estado", "rechazada")
                         .addOnSuccessListener {
-                            Toast.makeText(itemView.context, "Inscripción rechazada", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                itemView.context,
+                                "Inscripción rechazada",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             onInscripcionEliminada()
                         }
                         .addOnFailureListener {
-                            Toast.makeText(itemView.context, "Error al rechazar la inscripción", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                itemView.context,
+                                "Error al rechazar la inscripción",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                 }
             }

@@ -38,6 +38,7 @@ class OpcionesRepFragment : Fragment() {
         storage = FirebaseStorage.getInstance()
         database = FirebaseFirestore.getInstance()
 
+        // Botón para cambiar al fragment de eventos del representante
         binding.btnUnirseEvento.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragmentContainerView, EventosRepFragment())
@@ -45,6 +46,7 @@ class OpcionesRepFragment : Fragment() {
                 .commit()
         }
 
+        // Botón para ver solicitudes de unión
         binding.btnSolicitudesUnion.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragmentContainerView, SolicitudesRepFragment())
@@ -52,10 +54,12 @@ class OpcionesRepFragment : Fragment() {
                 .commit()
         }
 
+        // Botón para seleccionar una imagen del dispositivo
         binding.btnSubirFoto.setOnClickListener {
             seleccionarImagen()
         }
 
+        // Botón para modificar los datos de la peña
         binding.btnModificarInfo.setOnClickListener {
             val nombre = binding.etNombrePena.text.toString().trim()
             val ubicacion = binding.etUbicacion.text.toString().trim()
@@ -64,17 +68,25 @@ class OpcionesRepFragment : Fragment() {
             binding.etUbicacion.setText("")
             binding.etFoto.setText("")
 
+            // Si no se modifica nada muestra un aviso
             if (nombre.isEmpty() && ubicacion.isEmpty() && imageUri == null) {
-                Toast.makeText(requireContext(), "No has modificado ningún campo", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "No has modificado ningún campo",
+                    Toast.LENGTH_SHORT
+                ).show()
                 return@setOnClickListener
             }
 
+            // Si se cambia la ubicación obtiene las coordenadas antes de actualizar
             if (ubicacion.isNotEmpty()) {
                 obtenerCoordenadasYActualizarDatos(nombre, ubicacion)
             } else {
+                // Si hay imagen, la sube y actualiza
                 if (imageUri != null) {
                     subirImagenYActualizarDatos(nombre, "", null, null)
                 } else {
+                    // Solo actualiza nombre si es lo único modificado
                     actualizarDatosEnFirestore(nombre, "", null, null, "")
                 }
             }
@@ -83,23 +95,25 @@ class OpcionesRepFragment : Fragment() {
         return binding.root
     }
 
+    // Abre la galería para seleccionar imagen
     private fun seleccionarImagen() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(intent, REQUEST_CODE_IMAGE)
     }
 
+    // Resultado de la selección de imagen desde galería
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
             imageUri = data.data
             if (imageUri != null) {
-                // Obtener el nombre del archivo desde la URI y mostrarlo en el EditText
                 val nombreArchivo = obtenerNombreArchivo(imageUri!!)
-                binding.etFoto.setText(nombreArchivo) // Asigna el nombre al EditText
+                binding.etFoto.setText(nombreArchivo)
             }
         }
     }
 
+    // Obtiene el nombre del archivo a partir de la URI
     private fun obtenerNombreArchivo(uri: Uri): String {
         var nombre = "desconocido.jpg"
         val cursor = requireContext().contentResolver.query(uri, null, null, null, null)
@@ -112,28 +126,33 @@ class OpcionesRepFragment : Fragment() {
         return nombre
     }
 
+    // Se utiliza Geocoder para convertir la ubicación en coordenadas
     private fun obtenerCoordenadasYActualizarDatos(nombre: String, ubicacion: String) {
         val geocoder = Geocoder(requireContext(), Locale.getDefault())
-        try {
-            val direccionCompleta = "$ubicacion, Pedrajas de San Esteban, España"
-            val addresses = geocoder.getFromLocationName(direccionCompleta, 1)
-            if (addresses != null && addresses.isNotEmpty()) {
-                val lat = addresses[0].latitude
-                val lon = addresses[0].longitude
-                if (imageUri != null) {
-                    subirImagenYActualizarDatos(nombre, ubicacion, lat, lon)
-                } else {
-                    actualizarDatosEnFirestore(nombre, ubicacion, lat, lon, "")
-                }
+
+        val direccionCompleta = "$ubicacion, Pedrajas de San Esteban, España"
+        val addresses = geocoder.getFromLocationName(direccionCompleta, 1)
+        if (addresses != null && addresses.isNotEmpty()) {
+            val lat = addresses[0].latitude
+            val lon = addresses[0].longitude
+            if (imageUri != null) {
+                subirImagenYActualizarDatos(nombre, ubicacion, lat, lon)
             } else {
-                actualizarDatosEnFirestore(nombre, "", null, null, "")
+                actualizarDatosEnFirestore(nombre, ubicacion, lat, lon, "")
             }
-        } catch (e: Exception) {
+        } else {
             actualizarDatosEnFirestore(nombre, "", null, null, "")
         }
+
     }
 
-    private fun subirImagenYActualizarDatos(nombre: String, ubicacion: String, lat: Double?, lon: Double?) {
+    // Sube la imagen a Firebase Storage y luego actualiza los datos
+    private fun subirImagenYActualizarDatos(
+        nombre: String,
+        ubicacion: String,
+        lat: Double?,
+        lon: Double?
+    ) {
         val storageRef = storage.reference.child("imagenes/${UUID.randomUUID()}.jpg")
         imageUri?.let { uri ->
             storageRef.putFile(uri).addOnSuccessListener {
@@ -141,12 +160,20 @@ class OpcionesRepFragment : Fragment() {
                     actualizarDatosEnFirestore(nombre, ubicacion, lat, lon, imageUrl.toString())
                 }
             }.addOnFailureListener {
-                Toast.makeText(requireContext(), "Error al subir la imagen", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Error al subir la imagen", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }
 
-    private fun actualizarDatosEnFirestore(nombre: String, ubicacion: String, lat: Double?, lon: Double?, imageUrl: String) {
+    // Actualiza los datos en la colección "Penas" de Firestore
+    private fun actualizarDatosEnFirestore(
+        nombre: String,
+        ubicacion: String,
+        lat: Double?,
+        lon: Double?,
+        imageUrl: String
+    ) {
         val userId = auth.currentUser?.uid ?: return
 
         database.collection("Usuarios").document(userId).get().addOnSuccessListener { document ->
@@ -164,21 +191,20 @@ class OpcionesRepFragment : Fragment() {
                 }
                 if (imageUrl.isNotEmpty()) actualizaciones["imagen"] = imageUrl
 
-                if (actualizaciones.isEmpty()) {
-                    Toast.makeText(requireContext(), "No se ha cambiado nada", Toast.LENGTH_SHORT).show()
-                    return@addOnSuccessListener
-                }
-
                 penaRef.update(actualizaciones).addOnSuccessListener {
-                    Toast.makeText(requireContext(), "Datos actualizados correctamente", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Los datos se han actualizado correctamente",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }.addOnFailureListener {
-                    Toast.makeText(requireContext(), "Error al actualizar datos", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Error al actualizar los datos",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
-            } else {
-                Toast.makeText(requireContext(), "No se encontró ninguna peña asociada", Toast.LENGTH_SHORT).show()
             }
-        }.addOnFailureListener {
-            Toast.makeText(requireContext(), "Error al obtener datos del usuario", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -187,6 +213,7 @@ class OpcionesRepFragment : Fragment() {
         _binding = null
     }
 
+    // Constante para identificar la selección de imagen
     companion object {
         private const val REQUEST_CODE_IMAGE = 1
     }

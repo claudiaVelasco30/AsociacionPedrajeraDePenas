@@ -19,8 +19,10 @@ class PantallaMapaActivity : BaseActivity() {
         binding = ActivityPantallaMapaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Se configura el toolbar personalizado con el metodo definido en BaseActivity
         setupToolbar(binding.toolbar, binding.nombreToolbar, binding.iconoUsuario)
 
+        // Carga el fragmento del mapa dentro del contenedor
         supportFragmentManager.beginTransaction()
             .replace(R.id.contenedorMapa, MapaFragment())
             .commit()

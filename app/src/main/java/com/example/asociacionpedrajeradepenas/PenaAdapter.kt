@@ -6,35 +6,43 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
 class PenaAdapter(
-    private val penas: List<Map<String, Any>>,
-    private val onInfoClick: (Map<String, Any>) -> Unit,
-    private val onUnirseClick: (Map<String, Any>) -> Unit
+    private val penas: List<Map<String, Any>>, // Lista de peñas
+    private val idPenaUsuario: String?,
+    private val onInfoClick: (Map<String, Any>) -> Unit, // Callback para el botón "Más información"
+    private val onUnirseClick: (Map<String, Any>) -> Unit // Callback para el botón "Unirse"
 ) : RecyclerView.Adapter<PenaAdapter.PenaViewHolder>() {
 
+    // Crea y devuelve una nueva instancia del ViewHolder para cada ítem del RecyclerView
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PenaViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_pena, parent, false)
         return PenaViewHolder(view)
     }
 
+    // Enlaza los datos de una peña a la vista correspondiente en el ViewHolder
     override fun onBindViewHolder(holder: PenaViewHolder, position: Int) {
         val pena = penas[position]
-        holder.bind(pena, onInfoClick, onUnirseClick)
+        holder.bind(pena, idPenaUsuario, onInfoClick, onUnirseClick)
     }
 
+    // Devuelve el número total de elementos en la lista
     override fun getItemCount(): Int = penas.size
 
+    // ViewHolder que contiene y gestiona las vistas de cada ítem del RecyclerView
     class PenaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val nombre: TextView = itemView.findViewById(R.id.tvNombrePena)
         private val imagen: ImageView = itemView.findViewById(R.id.imgPena)
         private val btnInfo: Button = itemView.findViewById(R.id.btnMasInfo)
         private val btnUnirse: Button = itemView.findViewById(R.id.btnUnirse)
 
+        // Asocia los datos de la peña a las vistas y define el comportamiento de los botones
         fun bind(
             peña: Map<String, Any>,
+            idPenaUsuario: String?,
             onInfoClick: (Map<String, Any>) -> Unit,
             onUnirseClick: (Map<String, Any>) -> Unit
         ) {
@@ -42,6 +50,15 @@ class PenaAdapter(
             val imagenUrl = peña["imagen"] as? String
             if (!imagenUrl.isNullOrEmpty()) {
                 Glide.with(itemView.context).load(imagenUrl).into(imagen)
+            }
+
+            if (idPenaUsuario != null) {
+                // Si ya tiene una peña, desactiva el botón y cambia su estilo
+                btnUnirse.isEnabled = false
+                btnUnirse.setBackgroundColor(
+                    ContextCompat.getColor(itemView.context, R.color.verdeBoton)
+                )
+                btnUnirse.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
             }
 
             btnInfo.setOnClickListener {

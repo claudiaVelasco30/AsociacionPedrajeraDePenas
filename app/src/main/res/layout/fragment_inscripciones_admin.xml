@@ -36,7 +36,7 @@
                 android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvsolicitudesadmin"
+                android:id="@+id/rvinscripciones"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="vertical" />
