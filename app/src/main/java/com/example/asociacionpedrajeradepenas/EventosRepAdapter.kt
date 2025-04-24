@@ -18,7 +18,7 @@ class EventosRepAdapter(eventos: List<Map<String, Any>>) :
     RecyclerView.Adapter<EventosRepAdapter.EventoViewHolder>() {
 
     // Ordena los eventos por fecha descendente
-    private val eventosOrdenados = eventos.sortedByDescending { evento ->
+    private val eventosOrdenados = eventos.sortedBy { evento ->
         val fecha = evento["fecha_hora"]
         when (fecha) {
             is com.google.firebase.Timestamp -> fecha.toDate().time

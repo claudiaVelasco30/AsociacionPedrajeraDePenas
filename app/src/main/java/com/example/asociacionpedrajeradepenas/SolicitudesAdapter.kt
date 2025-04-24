@@ -40,7 +40,7 @@ class SolicitudesAdapter(
         fun bind(solicitud: Map<String, Any>) {
             val idSolicitud = solicitud["idSolicitud"] as? String
             val idUsuario = solicitud["idUsuario"] as? String
-            val idPena = solicitud["idPeña"] as? String
+            val idPena = solicitud["idPena"] as? String
             val nombreUsuario = solicitud["nombreUsuario"]
             val apellidoUsuario = solicitud["apellidosUsuario"]
 

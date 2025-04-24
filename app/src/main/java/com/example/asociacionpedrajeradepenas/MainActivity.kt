@@ -66,7 +66,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             if (datosValidos) {
-                iniciarSesion(email, password)
+                iniciarSesion(email, password, etEmail, etPassword)
+
             }
         }
 
@@ -82,11 +83,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Función para iniciar sesión con correo y contraseña
-    private fun iniciarSesion(email: String, password: String) {
+    private fun iniciarSesion(
+        email: String,
+        password: String,
+        etEmail: EditText,
+        etPassword: EditText
+    ) {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 // Si inicia sesión correctamente, navega a la pantalla principal
                 startActivity(Intent(this, PantallaPrincipalActivity::class.java))
+                etEmail.setText("")
+                etPassword.setText("")
             } else {
                 // Muestra error si no se pudo iniciar sesión
                 Toast.makeText(this, "Error al iniciar sesión", Toast.LENGTH_SHORT).show()
@@ -106,7 +114,7 @@ class MainActivity : AppCompatActivity() {
         clienteGoogle.signOut()
     }
 
-    // Método que se llama cuando vuelve de la actividad de selección de cuenta de Google
+    // Metodo que se llama cuando vuelve de la actividad de selección de cuenta de Google
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 100) {

@@ -47,7 +47,7 @@ class SolicitudesRepFragment : Fragment() {
                 // Filtrar solicitudes que están pendientes y son para la peña del usuario
                 db.collection("Solicitudes")
                     .whereEqualTo("estado", "pendiente")
-                    .whereEqualTo("idPeña", idPenaUsuario)
+                    .whereEqualTo("idPena", idPenaUsuario)
                     .get()
                     .addOnSuccessListener { result ->
                         val listaSolicitudes = mutableListOf<Map<String, String>>()
@@ -67,6 +67,7 @@ class SolicitudesRepFragment : Fragment() {
                         for (document in result.documents) {
                             val idUsuario = document.getString("idUsuario") ?: continue
                             val idSolicitud = document.id
+                            val idPena = document.getString("idPena") ?: continue
 
                             // Se obtienen los datos del usuario que hizo la solicitud
                             db.collection("Usuarios").document(idUsuario).get()
@@ -79,6 +80,7 @@ class SolicitudesRepFragment : Fragment() {
                                     val solicitudMap = mapOf(
                                         "idSolicitud" to idSolicitud,
                                         "idUsuario" to idUsuario,
+                                        "idPena" to idPena,
                                         "nombreUsuario" to nombreUsuario,
                                         "apellidosUsuario" to apellidosUsuario
                                     )

@@ -20,7 +20,7 @@ class EventosAdminAdapter(
 ) : RecyclerView.Adapter<EventosAdminAdapter.EventoViewHolder>() {
 
     // Lista de eventos ordenada por fecha
-    private val eventosOrdenados = eventos.sortedByDescending { evento ->
+    private val eventosOrdenados = eventos.sortedBy { evento ->
         val fecha = evento["fecha_hora"]
         when (fecha) {
             is com.google.firebase.Timestamp -> fecha.toDate().time

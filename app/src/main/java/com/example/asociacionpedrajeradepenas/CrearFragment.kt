@@ -135,6 +135,8 @@ class CrearFragment : Fragment() {
                 // Si no hay ubicación, guardar directamente
                 subirImagenYGuardarPena(nombre, "", null, null)
             }
+
+            alertDialog.dismiss()
         }
     }
 

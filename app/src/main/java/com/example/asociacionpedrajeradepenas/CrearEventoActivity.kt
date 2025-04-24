@@ -45,13 +45,47 @@ class CrearEventoActivity : BaseActivity() {
             val nombre = binding.etNombreEvento.text.toString().trim()
             val descripcion = binding.etDescripcion.text.toString().trim()
             val ubicacion = binding.etUbicacion.text.toString().trim()
-
             val fecha = binding.etFecha.text.toString().trim()
             val hora = binding.etHora.text.toString().trim()
             val fechaHoraString = "$fecha $hora"
 
             // Valida que todos los campos obligatorios estén completos
-            if (nombre.isNotEmpty() && ubicacion.isNotEmpty() && fecha.isNotEmpty() && hora.isNotEmpty() && imageUri != null) {
+            var camposValidos = true
+
+            if (nombre.isEmpty()) {
+                binding.etNombreEvento.error = "Introduce un nombre"
+                camposValidos = false
+            } else {
+                binding.etNombreEvento.error = null
+            }
+
+            if (ubicacion.isEmpty()) {
+                binding.etUbicacion.error = "Introduce una ubicación"
+                camposValidos = false
+            } else {
+                binding.etUbicacion.error = null
+            }
+
+            if (fecha.isEmpty()) {
+                binding.etFecha.error = "Introduce una fecha"
+                camposValidos = false
+            } else {
+                binding.etFecha.error = null
+            }
+
+            if (hora.isEmpty()) {
+                binding.etHora.error = "Introduce una hora"
+                camposValidos = false
+            } else {
+                binding.etHora.error = null
+            }
+
+            if (imageUri == null) {
+                binding.etFotoEvento.error = "Debes seleccionar una imagen"
+                camposValidos = false
+            }
+
+            if (camposValidos) {
                 subirImagenYGuardarEvento(nombre, descripcion, ubicacion, fechaHoraString)
 
                 // Limpiar campos después de crear
@@ -61,8 +95,6 @@ class CrearEventoActivity : BaseActivity() {
                 binding.etFotoEvento.setText("")
                 binding.etFecha.setText("")
                 binding.etHora.setText("")
-            } else {
-                Toast.makeText(this, "Completa los campos obligatorios", Toast.LENGTH_SHORT).show()
             }
         }
     }

@@ -9,6 +9,9 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class PenaAdapter(
     private val penas: List<Map<String, Any>>, // Lista de peñas
@@ -41,13 +44,13 @@ class PenaAdapter(
 
         // Asocia los datos de la peña a las vistas y define el comportamiento de los botones
         fun bind(
-            peña: Map<String, Any>,
+            pena: Map<String, Any>,
             idPenaUsuario: String?,
             onInfoClick: (Map<String, Any>) -> Unit,
             onUnirseClick: (Map<String, Any>) -> Unit
         ) {
-            nombre.text = peña["nombre"] as? String ?: "Sin nombre"
-            val imagenUrl = peña["imagen"] as? String
+            nombre.text = pena["nombre"] as? String ?: "Sin nombre"
+            val imagenUrl = pena["imagen"] as? String
             if (!imagenUrl.isNullOrEmpty()) {
                 Glide.with(itemView.context).load(imagenUrl).into(imagen)
             }
@@ -56,17 +59,48 @@ class PenaAdapter(
                 // Si ya tiene una peña, desactiva el botón y cambia su estilo
                 btnUnirse.isEnabled = false
                 btnUnirse.setBackgroundColor(
-                    ContextCompat.getColor(itemView.context, R.color.verdeBoton)
+                    ContextCompat.getColor(
+                        itemView.context,
+                        R.color.verdeBoton
+                    )
                 )
                 btnUnirse.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
+            } else {
+                // Comprobar si hay una solicitud pendiente del usuario para esta peña
+                val db = FirebaseFirestore.getInstance()
+                val idUsuario = FirebaseAuth.getInstance().currentUser?.uid
+
+                db.collection("Solicitudes")
+                    .whereEqualTo("idUsuario", idUsuario)
+                    .whereEqualTo("estado", "pendiente")
+                    .get()
+                    .addOnSuccessListener { documents: QuerySnapshot ->
+                        if (!documents.isEmpty) {
+                            // Si ya hay una solicitud pendiente, desactiva el botón
+                            btnUnirse.isEnabled = false
+                            btnUnirse.setBackgroundColor(
+                                ContextCompat.getColor(
+                                    itemView.context,
+                                    R.color.verdeBoton
+                                )
+                            )
+                            btnUnirse.setTextColor(
+                                ContextCompat.getColor(
+                                    itemView.context,
+                                    R.color.white
+                                )
+                            )
+                        }
+                    }
+
             }
 
             btnInfo.setOnClickListener {
-                onInfoClick(peña)
+                onInfoClick(pena)
             }
 
             btnUnirse.setOnClickListener {
-                onUnirseClick(peña)
+                onUnirseClick(pena)
             }
         }
     }

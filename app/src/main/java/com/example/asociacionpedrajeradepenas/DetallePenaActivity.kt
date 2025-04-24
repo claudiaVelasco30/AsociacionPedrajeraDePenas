@@ -68,7 +68,7 @@ class DetallePenaActivity : BaseActivity() {
             .addOnSuccessListener { document ->
                 val nombre = document.getString("nombre") ?: "Desconocido"
                 val apellidos = document.getString("apellidos") ?: ""
-                binding.tvRepresentantePena.text = "$nombre $apellidos"
+                binding.tvRepresentantePena.text = "Representante: $nombre $apellidos"
             }
             .addOnFailureListener {
                 binding.tvRepresentantePena.text = "Desconocido"

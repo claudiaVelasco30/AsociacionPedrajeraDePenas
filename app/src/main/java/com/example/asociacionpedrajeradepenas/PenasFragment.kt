@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -41,7 +42,7 @@ class PenasFragment : Fragment() {
         // Obtener el id del usuario
         val idUsuario = FirebaseAuth.getInstance().currentUser?.uid
 
-        if(idUsuario != null){
+        if (idUsuario != null) {
             db.collection("Usuarios").document(idUsuario).get()
                 .addOnSuccessListener { document ->
                     idPenaUsuario = document.getString("idPeña")
@@ -84,7 +85,7 @@ class PenasFragment : Fragment() {
     // Abre una nueva Activity con los detalles de la peña seleccionada
     private fun abrirDetallePena(pena: Map<String, Any>) {
         val intent = Intent(requireContext(), DetallePenaActivity::class.java).apply {
-            putExtra("idPeña", pena["id"] as? String)
+            putExtra("idPeña", pena["idPeña"] as? String)
             putExtra("nombre", pena["nombre"] as? String)
             putExtra("ubicacion", pena["ubicación"] as? String)
             putExtra("idRepresentante", pena["idRepresentante"] as? String)
@@ -96,7 +97,7 @@ class PenasFragment : Fragment() {
     // Muestra un AlertDialog personalizado para confirmar la unión a la peña
     private fun mostrarDialogoUnirse(pena: Map<String, Any>) {
         val nombrePena = pena["nombre"].toString()
-        val idPena = pena["id"].toString()
+        val idPena = pena["idPeña"].toString()
 
         val dialogo = layoutInflater.inflate(R.layout.dialogo_principal, null)
 
@@ -129,14 +130,26 @@ class PenasFragment : Fragment() {
     }
 
     // Crea un documento en la colección 'Solicitudes' con los datos del usuario y la peña
-    private fun crearSolicitud(idPeña: String, idUsuario: String) {
+    private fun crearSolicitud(idPena: String, idUsuario: String) {
+        val database = FirebaseFirestore.getInstance()
+        val idSolicitud = database.collection("Solicitudes").document().id
+
         val solicitud = hashMapOf(
-            "idPeña" to idPeña,
+            "idSolicitud" to idSolicitud,
+            "idPena" to idPena,
             "idUsuario" to idUsuario,
             "estado" to "pendiente"
         )
 
         db.collection("Solicitudes").add(solicitud)
+            .addOnSuccessListener {
+                Toast.makeText(requireContext(), "Solicitud enviada", Toast.LENGTH_SHORT).show()
+                cargarPenas()
+            }
+            .addOnFailureListener {
+                Toast.makeText(requireContext(), "Error al enviar solicitud", Toast.LENGTH_SHORT)
+                    .show()
+            }
     }
 
     override fun onDestroyView() {
