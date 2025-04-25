@@ -55,7 +55,7 @@ class DetallePenaActivity : BaseActivity() {
         db.collection("Usuarios").whereEqualTo("idPeña", idPeña).get()
             .addOnSuccessListener { result ->
                 val listaIntegrantes = result.documents.mapNotNull {
-                    " - " + it.getString("nombre") + " " + it.getString("apellidos")
+                    it.getString("nombre") + " " + it.getString("apellidos")
                 }
                 binding.tvIntegrantesPena.text = listaIntegrantes.joinToString("\n")
             }

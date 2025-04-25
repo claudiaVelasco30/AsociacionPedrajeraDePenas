@@ -104,7 +104,7 @@ class EventoAdapter(eventos: List<Map<String, Any>>) :
                 }
 
                 val fechaConFormato =
-                    SimpleDateFormat("d 'de' MMMM 'a las' h:mm a", Locale("es", "ES"))
+                    SimpleDateFormat("d 'de' MMMM 'a las' H:mm 'h'", Locale("es", "ES"))
                 fechaConFormato.format(date)
             } catch (e: Exception) {
                 "Sin fecha"

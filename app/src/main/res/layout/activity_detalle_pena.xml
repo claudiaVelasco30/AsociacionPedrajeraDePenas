@@ -131,8 +131,8 @@
 
                     <Button
                         android:id="@+id/btnMapa"
-                        android:layout_width="145dp"
-                        android:layout_height="45dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
                         android:backgroundTint="@color/white"
                         android:text="Ver en el mapa"

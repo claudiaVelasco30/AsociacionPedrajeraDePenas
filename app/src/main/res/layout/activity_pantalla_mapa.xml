@@ -59,11 +59,16 @@
             android:layout_height="40dp"
             android:background="@color/verdePrincipal" />
 
-        <FrameLayout
-            android:id="@+id/contenedorInfoPena"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:id="@+id/contenedorInfoPena"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+        </ScrollView>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

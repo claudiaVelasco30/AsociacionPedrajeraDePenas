@@ -42,8 +42,9 @@
 
             <Button
                 android:id="@+id/btnMasInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="45dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.63"
                 android:backgroundTint="@color/white"
                 android:padding="10dp"
                 android:text="Más información"
@@ -54,11 +55,12 @@
 
             <Button
                 android:id="@+id/btnUnirse"
-                android:layout_width="wrap_content"
-                android:layout_height="45dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.37"
                 android:layout_marginStart="8dp"
                 android:backgroundTint="@color/verdePrincipal"
-                android:padding="4dp"
+                android:padding="8dp"
                 android:text="Unirse"
                 android:textColor="@android:color/white"
                 android:textSize="12sp" />
