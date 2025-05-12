@@ -20,6 +20,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -49,12 +50,18 @@ class MapaFragment : Fragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googlemap: GoogleMap) {
-        // Inicializa el mapa cuando está listo
+        // Inicializa el mapa cuando está listo y configura los controles
         mapa = googlemap
+        mapa.uiSettings.isMapToolbarEnabled = true
 
-        // Centra el mapa en la ubicación del pueblo Pedrajas de San Esteban
+        // Centra el mapa en la ubicación del pueblo Pedrajas de San Esteban y establece los límites
         val centroMapa = LatLng(41.342386, -4.582162)
         mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(centroMapa, 15f))
+
+        val limitesMapa = LatLngBounds (LatLng(41.335043, -4.591619), LatLng(41.347696, -4.576101))
+        mapa.setLatLngBoundsForCameraTarget(limitesMapa)
+
+        mapa.setMinZoomPreference(15f)
 
         // Carga los marcadores de todas las peñas desde Firebase
         cargarPeñas()
@@ -73,7 +80,7 @@ class MapaFragment : Fragment(), OnMapReadyCallback {
             if (idPeña != null) {
                 mostrarInfoPeña(idPeña)
             }
-            true
+            false
         }
     }
 
@@ -140,7 +147,7 @@ class MapaFragment : Fragment(), OnMapReadyCallback {
                 }
 
                 btnUnirse.setOnClickListener {
-                    mostrarDialogoUnion(idPeña)
+                    mostrarDialogoUnirse(pena)
                 }
 
                 contenedorInfo.addView(itemView)
@@ -160,37 +167,60 @@ class MapaFragment : Fragment(), OnMapReadyCallback {
         startActivity(intent)
     }
 
-    // Muestra el diálogo para unirse a una peña
-    private fun mostrarDialogoUnion(idPeña: String) {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Unirse a la peña")
-            .setMessage("¿Seguro que quieres enviar una solicitud para unirte a esta peña?")
-            .setPositiveButton("Sí") { _, _ ->
-                val idUsuario = FirebaseAuth.getInstance().currentUser?.uid
-                if (idUsuario != null) {
-                    val solicitud = hashMapOf(
-                        "idPeña" to idPeña,
-                        "idUsuario" to idUsuario,
-                        "estado" to "pendiente"
-                    )
-                    db.collection("Solicitudes").add(solicitud)
-                        .addOnSuccessListener {
-                            Toast.makeText(
-                                requireContext(),
-                                "Solicitud enviada",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                        .addOnFailureListener {
-                            Toast.makeText(
-                                requireContext(),
-                                "Error al enviar solicitud",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                }
+    // Muestra un AlertDialog personalizado para confirmar la unión a la peña
+    private fun mostrarDialogoUnirse(pena: Map<String, String?>) {
+        val nombrePena = pena["nombre"].toString()
+        val idPena = pena["idPeña"].toString()
+
+        val dialogo = layoutInflater.inflate(R.layout.dialogo_principal, null)
+
+        val titulo = dialogo.findViewById<TextView>(R.id.tituloDialogo)
+        val mensaje = dialogo.findViewById<TextView>(R.id.mensajeDialogo)
+        val btnAceptar = dialogo.findViewById<TextView>(R.id.btnAceptar)
+        val btnCancelar = dialogo.findViewById<TextView>(R.id.btnCancelar)
+
+        titulo.text = "Unirse a peña"
+        mensaje.text = "¿Deseas realizar una solicitud para unirte a la peña \"$nombrePena\"?"
+
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setView(dialogo)
+            .create()
+
+        alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        alertDialog.show()
+
+        btnCancelar.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        btnAceptar.setOnClickListener {
+            val idUsuario = FirebaseAuth.getInstance().currentUser?.uid
+            if (idUsuario != null) {
+                crearSolicitud(idPena, idUsuario)
             }
-            .setNegativeButton("Cancelar", null)
-            .show()
+            alertDialog.dismiss()
+        }
+    }
+
+    // Crea un documento en la colección 'Solicitudes' con los datos del usuario y la peña
+    private fun crearSolicitud(idPena: String, idUsuario: String) {
+        val database = FirebaseFirestore.getInstance()
+        val idSolicitud = database.collection("Solicitudes").document().id
+
+        val solicitud = hashMapOf(
+            "idSolicitud" to idSolicitud,
+            "idPena" to idPena,
+            "idUsuario" to idUsuario,
+            "estado" to "pendiente"
+        )
+
+        db.collection("Solicitudes").add(solicitud)
+            .addOnSuccessListener {
+                Toast.makeText(requireContext(), "Solicitud enviada", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(requireContext(), "Error al enviar solicitud", Toast.LENGTH_SHORT)
+                    .show()
+            }
     }
 }

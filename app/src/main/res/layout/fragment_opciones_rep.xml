@@ -46,7 +46,7 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="40dp"
                 android:layout_marginBottom="40dp"
-                android:background="#8F8F94" />
+                android:background="@color/grisOscuro2" />
 
             <TextView
                 android:layout_width="wrap_content"

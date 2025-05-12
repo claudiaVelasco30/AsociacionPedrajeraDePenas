@@ -27,9 +27,4 @@ class PantallaMapaActivity : BaseActivity() {
             .replace(R.id.contenedorMapa, MapaFragment())
             .commit()
     }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_toolbar, menu)
-        return true
-    }
 }
