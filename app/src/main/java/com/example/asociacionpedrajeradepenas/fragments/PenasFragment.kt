@@ -1,4 +1,4 @@
-package com.example.asociacionpedrajeradepenas
+package com.example.asociacionpedrajeradepenas.fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,6 +10,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.asociacionpedrajeradepenas.adapters.PenaAdapter
+import com.example.asociacionpedrajeradepenas.R
+import com.example.asociacionpedrajeradepenas.activities.DetallePenaActivity
 import com.example.asociacionpedrajeradepenas.databinding.FragmentPenasBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore

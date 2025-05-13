@@ -1,4 +1,4 @@
-package com.example.asociacionpedrajeradepenas
+package com.example.asociacionpedrajeradepenas.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.asociacionpedrajeradepenas.adapters.InscripcionesAdapter
 import com.example.asociacionpedrajeradepenas.databinding.FragmentInscripcionesAdminBinding
 import com.google.firebase.firestore.FirebaseFirestore
 

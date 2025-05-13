@@ -1,11 +1,7 @@
-package com.example.asociacionpedrajeradepenas
+package com.example.asociacionpedrajeradepenas.activities
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.example.asociacionpedrajeradepenas.databinding.ActivityDetallePenaBinding
 import com.google.firebase.firestore.FirebaseFirestore

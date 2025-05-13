@@ -1,4 +1,4 @@
-package com.example.asociacionpedrajeradepenas
+package com.example.asociacionpedrajeradepenas.fragments
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.asociacionpedrajeradepenas.R
 import com.google.firebase.firestore.FirebaseFirestore
 
 class SolicitudesAdapter(

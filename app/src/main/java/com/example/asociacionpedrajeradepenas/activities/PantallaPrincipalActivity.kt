@@ -1,10 +1,11 @@
-package com.example.asociacionpedrajeradepenas
+package com.example.asociacionpedrajeradepenas.activities
 
 import android.os.Bundle
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.asociacionpedrajeradepenas.R
 import com.example.asociacionpedrajeradepenas.databinding.ActivityPantallaPrincipalBinding
 
 class PantallaPrincipalActivity : BaseActivity() {

@@ -1,4 +1,4 @@
-package com.example.asociacionpedrajeradepenas
+package com.example.asociacionpedrajeradepenas.fragments
 
 import android.content.Intent
 import androidx.fragment.app.Fragment
@@ -14,6 +14,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
+import com.example.asociacionpedrajeradepenas.R
+import com.example.asociacionpedrajeradepenas.activities.DetallePenaActivity
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap

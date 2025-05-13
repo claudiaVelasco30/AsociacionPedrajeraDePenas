@@ -1,4 +1,4 @@
-package com.example.asociacionpedrajeradepenas
+package com.example.asociacionpedrajeradepenas.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

@@ -1,8 +1,9 @@
-package com.example.asociacionpedrajeradepenas
+package com.example.asociacionpedrajeradepenas.activities
 
 import android.os.Bundle
 import com.google.android.material.tabs.TabLayout
 import androidx.viewpager.widget.ViewPager
+import com.example.asociacionpedrajeradepenas.fragments.SectionsPagerAdapter
 import com.example.asociacionpedrajeradepenas.databinding.ActivityPantallaAdministradorBinding
 
 class PantallaAdministradorActivity : BaseActivity() {

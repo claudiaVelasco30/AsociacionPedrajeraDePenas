@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/fondo1"
-    tools:context=".PenasFragment">
+    tools:context=".fragments.PenasFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvpenas"

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/fondo1"
-    tools:context=".CrearEventoActivity">
+    tools:context=".activities.CrearEventoActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

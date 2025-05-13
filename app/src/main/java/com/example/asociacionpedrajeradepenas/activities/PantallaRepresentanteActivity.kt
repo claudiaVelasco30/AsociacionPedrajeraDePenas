@@ -1,11 +1,6 @@
-package com.example.asociacionpedrajeradepenas
+package com.example.asociacionpedrajeradepenas.activities
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.asociacionpedrajeradepenas.databinding.ActivityPantallaPrincipalBinding
 import com.example.asociacionpedrajeradepenas.databinding.ActivityPantallaRepresentanteBinding
 
 class PantallaRepresentanteActivity : BaseActivity() {

@@ -1,4 +1,4 @@
-package com.example.asociacionpedrajeradepenas
+package com.example.asociacionpedrajeradepenas.fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.asociacionpedrajeradepenas.adapters.EventosAdminAdapter
+import com.example.asociacionpedrajeradepenas.activities.CrearEventoActivity
 import com.example.asociacionpedrajeradepenas.databinding.FragmentEventosAdminBinding
 import com.google.firebase.firestore.FirebaseFirestore
 

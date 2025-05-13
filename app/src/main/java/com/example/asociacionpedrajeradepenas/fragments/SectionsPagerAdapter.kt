@@ -1,9 +1,10 @@
-package com.example.asociacionpedrajeradepenas
+package com.example.asociacionpedrajeradepenas.fragments
 
 import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.example.asociacionpedrajeradepenas.R
 
 // Array que contiene los identificadores de los títulos de las pestañas
 private val TAB_TITLES = arrayOf(

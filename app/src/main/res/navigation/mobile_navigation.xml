@@ -7,17 +7,17 @@
 
     <fragment
         android:id="@+id/navigation_eventos"
-        android:name="com.example.asociacionpedrajeradepenas.EventosFragment"
+        android:name="com.example.asociacionpedrajeradepenas.fragments.EventosFragment"
         tools:layout="@layout/fragment_eventos" />
 
     <fragment
         android:id="@+id/navigation_penas"
-        android:name="com.example.asociacionpedrajeradepenas.PenasFragment"
+        android:name="com.example.asociacionpedrajeradepenas.fragments.PenasFragment"
         tools:layout="@layout/fragment_penas" />
 
     <fragment
         android:id="@+id/navigation_crear"
-        android:name="com.example.asociacionpedrajeradepenas.CrearFragment"
+        android:name="com.example.asociacionpedrajeradepenas.fragments.CrearFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_crear" />
 </navigation>

@@ -1,13 +1,8 @@
-package com.example.asociacionpedrajeradepenas
+package com.example.asociacionpedrajeradepenas.activities
 
 import android.os.Bundle
-import android.view.Menu
-import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.example.asociacionpedrajeradepenas.fragments.MapaFragment
+import com.example.asociacionpedrajeradepenas.R
 import com.example.asociacionpedrajeradepenas.databinding.ActivityPantallaMapaBinding
 
 class PantallaMapaActivity : BaseActivity() {
